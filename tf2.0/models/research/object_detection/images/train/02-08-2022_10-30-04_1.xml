@@ -1,0 +1,26 @@
+<annotation>
+	<folder>newimg</folder>
+	<filename>02-08-2022_10-30-04_1.png</filename>
+	<path>C:\Users\shrey\Desktop\421proj\wsuag-arduinoapp\tf2.0\models\research\object_detection\images\newimg\02-08-2022_10-30-04_1.png</path>
+	<source>
+		<database>Unknown</database>
+	</source>
+	<size>
+		<width>2560</width>
+		<height>1248</height>
+		<depth>3</depth>
+	</size>
+	<segmented>0</segmented>
+	<object>
+		<name>box</name>
+		<pose>Unspecified</pose>
+		<truncated>0</truncated>
+		<difficult>0</difficult>
+		<bndbox>
+			<xmin>1948</xmin>
+			<ymin>502</ymin>
+			<xmax>1983</xmax>
+			<ymax>524</ymax>
+		</bndbox>
+	</object>
+</annotation>
