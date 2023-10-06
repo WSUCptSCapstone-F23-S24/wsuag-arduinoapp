@@ -24,25 +24,33 @@ See [conda_libraries.txt](https://github.com/WSUCptSCapstone-F23-S24/wsuag-ardui
 
 ### Installation Steps
 
-TODO: Describe the installation process (making sure you mention `bundle install`).
-Instructions need to be such that a user can just copy/paste the commands to get things set up and running. 
+Steps:
+Clone repo - git clone https://github.com/WSUCptSCapstone-F23-S24/wsuag-arduinoapp.git
+Install protobuf: download release for your device type - https://github.com/protocolbuffers/protobuf/releases
+Download anaconda -  https://www.anaconda.com/
+In anaconda Prompt:
+  conda create -n tf2 pip python=3.9
+  conda activate tf2
 
 
 ## Functionality
 
-TODO: Write usage instructions. Structuring it as a walkthrough can help structure this section,
-and showcase your features.
+For fucntionality specifically running our model on iamges, first open repo in a conda environemnt. 
+Change the directory to the object_detection folder.
+Add images to the crop_images folder that you would like to run the model on.
+run the command: python .\detect_from_image.py -m ._inference_graph\saved_model\ -l .\labelmap.pbtxt -i .\test_images\crop_test
+check the folder called ouput for the annotated pictures.
 
 
 ## Known Problems
 
-TODO: Describe any known issues, bugs, odd behaviors or code smells. 
-Provide steps to reproduce the problem and/or name a file or a function where the problem lives.
+A known issue in our project is cloning this repository. This is because our git repo uses "Large File Storage" (LFS) to store files larger than 100 mb which we do have.
+When pulling the repo some files are not acccessbile so we have to run these commands in the terminal:
+- git lfs fetch
+- git lfs checkout
 
 
 ## Contributing
-
-TODO: Leave the steps below if you want others to contribute to your project.
 
 1. Fork it!
 2. Create your feature branch: `git checkout -b my-new-feature`
@@ -53,8 +61,9 @@ TODO: Leave the steps below if you want others to contribute to your project.
 ## Additional Documentation
 
 TODO: Provide links to additional documentation that may exist in the repo, e.g.,
-  * Sprint reports
-  * User links
+  Sprint Report: 
+  Project Description: 
+  Conda Libraries: 
 
 ## License
 MIT License
