@@ -21,30 +21,25 @@ Figure Out Handling Images for Multiple Plates: We also had ongoing discussions 
 ## Completed Issues/User Stories
 Here are links to the issues that we completed in this sprint:
 
- * URL of issue 1
- * URL of issue 2
- * URL of issue n
-
- Reminders (Remove this section when you save the file):
-  * Each issue should be assigned to a milestone
-  * Each completed issue should be assigned to a pull request
-  * Each completed pull request should include a link to a "Before and After" video
-  * All team members who contributed to the issue should be assigned to it on GitHub
-  * Each issue should be assigned story points using a label
-  * Story points contribution of each team member should be indicated in a comment
+  * [Create sprint 1 report ](https://github.com/WSUCptSCapstone-F23-S24/wsuag-arduinoapp/issues/18)
+  * [Update readme ](https://github.com/WSUCptSCapstone-F23-S24/wsuag-arduinoapp/issues/17)
+  * [Write Solution Approach](https://github.com/WSUCptSCapstone-F23-S24/wsuag-arduinoapp/issues/16)
+  * [Explore/train deep learning models ](https://github.com/WSUCptSCapstone-F23-S24/wsuag-arduinoapp/issues/10)
+  * [label data/images ](https://github.com/WSUCptSCapstone-F23-S24/wsuag-arduinoapp/issues/6)
+  * [Check accuracy of models ](https://github.com/WSUCptSCapstone-F23-S24/wsuag-arduinoapp/issues/5)
+  * [Apply tensorflow model to the data ](https://github.com/WSUCptSCapstone-F23-S24/wsuag-arduinoapp/issues/2)
+  * [Explore tools to label images ](https://github.com/WSUCptSCapstone-F23-S24/wsuag-arduinoapp/issues/1)
  
  ## Incomplete Issues/User Stories
  Here are links to issues we worked on but did not complete in this sprint:
  
- * URL of issue 1 <<One sentence explanation of why issue was not completed>>
- * URL of issue 2 <<One sentence explanation of why issue was not completed>>
- * URL of issue n <<One sentence explanation of why issue was not completed>>
+  * [Recreate model ](https://github.com/WSUCptSCapstone-F23-S24/wsuag-arduinoapp/issues/20)
+    * Did not anticipate time required for model
+  * [Apply algorithm to locate left most box](https://github.com/WSUCptSCapstone-F23-S24/wsuag-arduinoapp/issues/4)
+    * Did not anticipate time required for model
+  * [Figure out what to do for images with multiple plates. #3 ](https://github.com/WSUCptSCapstone-F23-S24/wsuag-arduinoapp/issues/3)
+    * Needed clarification from client
  
- Examples of explanations (Remove this section when you save the file):
-  * "We ran into a complication we did not anticipate (explain briefly)." 
-  * "We decided that the feature did not add sufficient value for us to work on it in this sprint (explain briefly)."
-  * "We could not reproduce the bug" (explain briefly).
-  * "We did not get to this issue because..." (explain briefly)
 
 ## Code Files for Review
 Please review the following code files, which were actively developed during this sprint, for quality:
