@@ -1,4 +1,4 @@
-# Sprint x Report (8/26/21 - 9/24/2021)
+# Sprint 1 Report (8/26/21 - 9/24/2021)
 
 ## What's New (User Facing)
  * Feature 1: Model Training: During Sprint 1, we completed the training of our machine learning model using a labeled dataset of 110 images. This trained model can now identify reference plates in images with a high degree of accuracy and annotate them with bounding boxes.
