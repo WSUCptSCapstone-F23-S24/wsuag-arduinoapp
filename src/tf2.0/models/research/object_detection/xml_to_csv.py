@@ -1,40 +1,48 @@
-# based on https://github.com/datitran/raccoon_dataset/blob/master/xml_to_csv.py
-
 import os
 import glob
 import pandas as pd
 import xml.etree.ElementTree as ET
 
-
-def xml_to_csv(path):
+def convert_xml_to_csv(xml_folder, csv_output_folder):
     xml_list = []
-    for xml_file in glob.glob(path + '/*.xml'):
+    
+    for xml_file in glob.glob(os.path.join(xml_folder, '*.xml')):
         tree = ET.parse(xml_file)
         root = tree.getroot()
-        for member in root.findall('object'):
-            value = (root.find('filename').text,
-                     int(root.find('size')[0].text),
-                     int(root.find('size')[1].text),
-                     member[0].text,
-                     int(member[4][0].text),
-                     int(member[4][1].text),
-                     int(member[4][2].text),
-                     int(member[4][3].text)
-                     )
-            xml_list.append(value)
-    column_name = ['filename', 'width', 'height', 'class', 'xmin', 'ymin', 'xmax', 'ymax']
-    xml_df = pd.DataFrame(xml_list, columns=column_name)
-    return xml_df
+        image_file = os.path.splitext(root.find('filename').text)[0] + '.png'
 
+        for obj in root.findall('object'):
+            class_name = obj.find('name').text
+            bbox = obj.find('bndbox')
+            xmin = int(bbox.find('xmin').text)
+            ymin = int(bbox.find('ymin').text)
+            xmax = int(bbox.find('xmax').text)
+            ymax = int(bbox.find('ymax').text)
+
+            xml_list.append({
+                'filename': image_file,
+                'width': int(root.find('size')[0].text),
+                'height': int(root.find('size')[1].text),
+                'class': class_name,
+                'xmin': xmin,
+                'ymin': ymin,
+                'xmax': xmax,
+                'ymax': ymax
+            })
+
+    df = pd.DataFrame(xml_list)
+    csv_output_file = os.path.join(csv_output_folder, f'{os.path.basename(xml_folder)}.csv')
+    df.to_csv(csv_output_file, index=False)
 
 def main():
-    for folder in ['train', 'test']:
-        image_path = os.path.join(os.getcwd(), ('images/' + folder))
-        xml_df = xml_to_csv(image_path)
-        xml_df.to_csv(('images/'+folder+'_labels.csv'), index=None)
-    print('Successfully converted xml to csv.')
+    xml_folder_train = os.path.join(os.getcwd(), 'images', 'train')
+    xml_folder_test = os.path.join(os.getcwd(), 'images', 'test')
+    csv_output_folder = os.path.join(os.getcwd(), 'images')
+    
+    convert_xml_to_csv(xml_folder_train, csv_output_folder)
+    convert_xml_to_csv(xml_folder_test, csv_output_folder)
+    
+    print('Successfully converted XML annotations to CSV for train and test.')
 
-
-main()
-
-
+if __name__ == '__main__':
+    main()
