@@ -28,7 +28,7 @@ Steps: \
 Clone repo - `git clone https://github.com/WSUCptSCapstone-F23-S24/wsuag-arduinoapp.git` \
 Install [protobuf](https://github.com/protocolbuffers/protobuf/releases): download release for your device type \
 Download [anaconda](https://www.anaconda.com/) \
-In anaconda Prompt: \
+In anaconda Prompt: 
   `conda create -n tf2 pip python=3.9` \
   `conda activate tf2` \
 
