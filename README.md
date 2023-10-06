@@ -20,7 +20,7 @@ The WSUAG-Arduino App project is a custom solution designed to process images an
 
 ### Add-ons
 
-See conda_libraries.txt for list of add ons used in tensorflow environment.
+See [conda_libraries.txt](https://github.com/WSUCptSCapstone-F23-S24/wsuag-arduinoapp/blob/docs/conda_libraries.txt) for list of add ons used in tensorflow environment.
 
 ### Installation Steps
 
