@@ -43,9 +43,9 @@ Here are links to the issues that we completed in this sprint:
 
 ## Code Files for Review
 Please review the following code files, which were actively developed during this sprint, for quality:
- * [Name of code file 1](https://github.com/your_repo/file_extension)
- * [Name of code file 2](https://github.com/your_repo/file_extension)
- * [Name of code file 3](https://github.com/your_repo/file_extension)
+ * [Model](https://github.com/WSUCptSCapstone-F23-S24/wsuag-arduinoapp/tree/main/src/current_model/_inference_graph)
+ * [Detect from image](https://github.com/WSUCptSCapstone-F23-S24/wsuag-arduinoapp/blob/main/src/tf2.0/models/research/object_detection/detect_from_image.py)
+ * [xml to csv](https://github.com/WSUCptSCapstone-F23-S24/wsuag-arduinoapp/blob/main/src/tf2.0/models/research/object_detection/xml_to_csv.py)
  
 ## Retrospective Summary
 Here's what went well:
