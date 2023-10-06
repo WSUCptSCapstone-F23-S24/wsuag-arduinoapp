@@ -13,11 +13,14 @@ The WSUAG-Arduino App project is a custom solution designed to process images an
 
 ### Prerequisites
 
-TODO: List what a user needs to have installed before running the installation instructions below (e.g., git, which versions of Ruby/Rails)
+- [python 3.9](https://www.python.org/downloads/release/python-390/)
+- [protobuf](https://github.com/protocolbuffers/protobuf/releases)
+- [conda](https://docs.conda.io/projects/conda/en/latest/user-guide/install/download.html)
+- [tensorflow](https://github.com/tensorflow/models)
 
 ### Add-ons
 
-TODO: List which add-ons are included in the project, and the purpose each add-on serves in your app.
+See conda_libraries.txt for list of add ons used in tensorflow environment.
 
 ### Installation Steps
 
@@ -56,7 +59,7 @@ TODO: Provide links to additional documentation that may exist in the repo, e.g.
 ## License
 MIT License
 
-Copyright (c) [year] [fullname]
+Copyright (c) 2023 wsuag-arduinoapp
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
