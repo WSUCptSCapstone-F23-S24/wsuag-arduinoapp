@@ -24,18 +24,18 @@ See [conda_libraries.txt](https://github.com/WSUCptSCapstone-F23-S24/wsuag-ardui
 
 ### Installation Steps
 
-Steps:
-Clone repo - git clone https://github.com/WSUCptSCapstone-F23-S24/wsuag-arduinoapp.git
-Install protobuf: download release for your device type - https://github.com/protocolbuffers/protobuf/releases
-Download anaconda -  https://www.anaconda.com/
-In anaconda Prompt:
-  conda create -n tf2 pip python=3.9
-  conda activate tf2
+Steps: \
+Clone repo - `git clone https://github.com/WSUCptSCapstone-F23-S24/wsuag-arduinoapp.git` \
+Install [protobuf](https://github.com/protocolbuffers/protobuf/releases): download release for your device type \
+Download [anaconda](https://www.anaconda.com/) \
+In anaconda Prompt: \
+  `conda create -n tf2 pip python=3.9` \
+  `conda activate tf2` \
 
 
 ## Functionality
 
-For fucntionality specifically running our model on iamges, first open repo in a conda environemnt. 
+For functionality specifically running our model on iamges, first open repo in a conda environemnt. 
 Change the directory to the object_detection folder.
 Add images to the crop_images folder that you would like to run the model on.
 run the command: python .\detect_from_image.py -m ._inference_graph\saved_model\ -l .\labelmap.pbtxt -i .\test_images\crop_test
@@ -60,10 +60,9 @@ When pulling the repo some files are not acccessbile so we have to run these com
 
 ## Additional Documentation
 
-TODO: Provide links to additional documentation that may exist in the repo, e.g.,
-  Sprint Report: 
-  Project Description: 
-  Conda Libraries: 
+  [Sprint 1 Report](https://github.com/WSUCptSCapstone-F23-S24/wsuag-arduinoapp/blob/main/sprint_report.md)
+  [Project Description](https://github.com/WSUCptSCapstone-F23-S24/wsuag-arduinoapp/blob/main/Project_Description.pdf)
+  [Conda Libraries](https://github.com/WSUCptSCapstone-F23-S24/wsuag-arduinoapp/blob/main/conda_libraries.txt)
 
 ## License
 MIT License
