@@ -60,9 +60,10 @@ When pulling the repo some files are not acccessbile so we have to run these com
 
 ## Additional Documentation
 
-  [Sprint 1 Report](https://github.com/WSUCptSCapstone-F23-S24/wsuag-arduinoapp/blob/main/sprint_report.md)
-  [Project Description](https://github.com/WSUCptSCapstone-F23-S24/wsuag-arduinoapp/blob/main/Project_Description.pdf)
-  [Conda Libraries](https://github.com/WSUCptSCapstone-F23-S24/wsuag-arduinoapp/blob/main/conda_libraries.txt)
+  * [Sprint 1 Report](https://github.com/WSUCptSCapstone-F23-S24/wsuag-arduinoapp/blob/main/sprint_report.md)
+  * [Video Demo](https://github.com/WSUCptSCapstone-F23-S24/wsuag-arduinoapp/blob/main/video_demo.txt)
+  * [Project Description](https://github.com/WSUCptSCapstone-F23-S24/wsuag-arduinoapp/blob/main/Project_Description.pdf)
+  * [Conda Libraries](https://github.com/WSUCptSCapstone-F23-S24/wsuag-arduinoapp/blob/main/conda_libraries.txt)
 
 ## License
 MIT License
