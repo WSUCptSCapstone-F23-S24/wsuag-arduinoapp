@@ -28,23 +28,23 @@ Steps: \
 Clone repo - `git clone https://github.com/WSUCptSCapstone-F23-S24/wsuag-arduinoapp.git` \
 Install [protobuf](https://github.com/protocolbuffers/protobuf/releases): download release for your device type \
 Download [anaconda](https://www.anaconda.com/) \
-In anaconda Prompt: 
+In anaconda Prompt: \
   `conda create -n tf2 pip python=3.9` \
-  `conda activate tf2` \
+  `conda activate tf2` 
 
 
 ## Functionality
 
-For functionality specifically running our model on iamges, first open repo in a conda environemnt. 
-Change the directory to the object_detection folder.
-Add images to the crop_images folder that you would like to run the model on.
-run the command: python .\detect_from_image.py -m ._inference_graph\saved_model\ -l .\labelmap.pbtxt -i .\test_images\crop_test
+For functionality specifically running our model on iamges, first open repo in a conda environment. \
+Change the directory to the object_detection folder. \
+Add images to the crop_images folder that you would like to run the model on. \
+run the command: `python .\detect_from_image.py -m ._inference_graph\saved_model\ -l .\labelmap.pbtxt -i .\test_images\crop_test` \
 check the folder called ouput for the annotated pictures.
 
 
 ## Known Problems
 
-A known issue in our project is cloning this repository. This is because our git repo uses "Large File Storage" (LFS) to store files larger than 100 mb which we do have.
+A known issue in our project is cloning this repository. This is because our git repo uses "Large File Storage" (LFS) to store files larger than 100 mb which we do have. \
 When pulling the repo some files are not acccessbile so we have to run these commands in the terminal:
 - git lfs fetch
 - git lfs checkout
