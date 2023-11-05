@@ -110,7 +110,7 @@ def slice_into_boxes(image_path,out_folder,x,y,length):
 
     crop_img = img.copy()
 
-    buffer = 5
+    buffer = 4
 
     #crop_img = img[y:int(y+(length*(height_base/length_base))), x:int(x+length)]
     box_length =  int(length * (box_size_base / length_base))
@@ -135,6 +135,7 @@ def slice_into_boxes(image_path,out_folder,x,y,length):
     crop_box_2 = crop_img[(box_2_y_1 - zoom_out):(box_2_y_2 + zoom_out), (box_2_x_1 - zoom_out):(box_2_x_2 + zoom_out)]
     crop_box_3 = crop_img[(box_3_y_1 - zoom_out):(box_3_y_2 + zoom_out), (box_3_x_1 - zoom_out):(box_3_x_2 + zoom_out)]
     render_rectangle = False
+    print(f"area {(box_1_x_1-box_1_x_2)*(box_1_y_2-box_1_y_1)}")
     if render_rectangle:
         cv2.rectangle(crop_img, (box_1_x_1,box_1_y_1),
                       (box_1_x_2,box_1_y_2), (0,0,256), 1)
@@ -145,10 +146,10 @@ def slice_into_boxes(image_path,out_folder,x,y,length):
                       (box_3_x_2, box_3_y_2), (256, 0, 0), 1)
         cv2.imwrite(os.path.splitext(image_path)[0] + "_panel" + os.path.splitext(image_path)[1], crop_img)
     print(out_folder+os.path.splitext(os.path.basename(image_path))[0] + "_box_1" + os.path.splitext(image_path)[1])
-    cv2.imwrite(out_folder+os.path.splitext(os.path.basename(image_path))[0] + "_box_1" + os.path.splitext(image_path)[1],crop_box_1)
-    cv2.imwrite(out_folder+os.path.splitext(os.path.basename(image_path))[0] + "_box_2" + os.path.splitext(image_path)[1], crop_box_2)
-    cv2.imwrite(out_folder+os.path.splitext(os.path.basename(image_path))[0] + "_box_3" + os.path.splitext(image_path)[1], crop_box_3)
 
+    cv2.imwrite(out_folder+"\\box_1\\"+os.path.splitext(os.path.basename(image_path))[0] + "_box_1" + os.path.splitext(image_path)[1],crop_box_1)
+    cv2.imwrite(out_folder+"\\box_2\\"+os.path.splitext(os.path.basename(image_path))[0] + "_box_2" + os.path.splitext(image_path)[1], crop_box_2)
+    cv2.imwrite(out_folder+"\\box_3\\"+os.path.splitext(os.path.basename(image_path))[0] + "_box_3" + os.path.splitext(image_path)[1], crop_box_3)
 
 slice_into_boxes("C:\\Users\\code8\\Documents\\Flood_fill_421\\12-05-2022_10-30-23_2.png","C:\\Users\\code8\\Documents\\Flood_fill_421\\with_buf\\",642,228,58)
 make_constant_csv("C:\\Users\\code8\\Documents\\Flood_fill_421\\with_buf\\")
