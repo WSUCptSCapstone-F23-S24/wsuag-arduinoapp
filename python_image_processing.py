@@ -152,3 +152,76 @@ def slice_into_boxes(image_path,out_folder,x,y,length):
 
 slice_into_boxes("C:\\Users\\code8\\Documents\\Flood_fill_421\\12-05-2022_10-30-23_2.png","C:\\Users\\code8\\Documents\\Flood_fill_421\\with_buf\\",642,228,58)
 make_constant_csv("C:\\Users\\code8\\Documents\\Flood_fill_421\\with_buf\\")
+
+
+
+
+def get_index(in_path,r_b,r_g,r_r,plots,varients):
+    # image size
+    img_roi = 0
+    in_data = [img for img in os.listdir(in_path) if img.endswith('.png')]
+
+    
+    vi = 'ndvi'
+    
+    # Image size
+    i_w = 1280
+    i_h = 1248
+    
+    vi_data = []
+    
+    print('start')
+    # Loop to extract the vi
+    for file in in_data:
+        img = cv2.imread(os.path.join(in_path, file))  # Read the image
+        img = img[img_roi:900, i_w:2496]  # Resize the image
+    
+        # Split the color band
+        b, g, r = cv2.split(img)
+        b = r_b * b
+        g = r_g * g
+        r = r_r * r
+    
+        # Calculate the ndvi
+        index = ((1.664 * (b.astype(float))) / (0.953 * (r.astype(float)))) - 1
+        # Create black image for masking
+        blank = np.zeros(index.shape[:2], dtype='uint8')
+    
+        # Mask location on the image
+        plot = plots
+        var = varients
+        nd = []
+    
+        for pl, var in zip(plot, var):
+            # Mask the plot in left side
+            pl_m = cv2.fillPoly(blank, np.array([pl]), 255)
+            m = cv2.bitwise_and(index, index, mask=pl_m)
+            m[m <= 0] = np.nan  # Replace zero value to nan
+            mean_m = round(np.nanmean(m), 5)
+            median_m = round(np.nanmedian(m), 5)
+            std_m = round(np.nanstd(m), 5)
+            max_m = round(np.nanmax(m), 5)
+            p95_m = round(np.nanpercentile(m, 95), 5)
+            p90_m = round(np.nanpercentile(m, 90), 5)
+            p85_m = round(np.nanpercentile(m, 85), 5)
+            date = Path(file[:].split('_')[0]).name
+            time = Path(file[:].split('_')[1]).name
+            date_time = date[:5] + '_' + time[:2]
+            rep_pic = file[-5]
+            variety = var[0]
+            rep_var = var[-1]
+            vi = vi
+    
+            # Make dictionary for ndvi of one plot
+            data = [date, time, date_time, variety, rep_var, vi, mean_m, median_m, std_m, max_m, p95_m, p90_m, p85_m,
+                    rep_pic]
+            nd.append(data)
+        # Combine data from all images
+        vi_data.extend(nd)
+    # Make a Datafram to save as a csv file
+    header = ['date', 'time', 'date_time', 'variety', 'rep_var', 'vi', 'mean', 'median', 'std', 'max', 'p95', 'p90', 'p85',
+              'rep_pic']
+    df_final = pd.DataFrame(vi_data)
+    df_final.columns = header
+    df_final.to_csv(vi + '.csv')
+    print('finish')
