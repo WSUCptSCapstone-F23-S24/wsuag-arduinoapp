@@ -25,14 +25,6 @@ Here are links to the issues that we completed in this sprint:
  * [Get image adjustment Algo from previous work and apply it using pixel information](https://github.com/WSUCptSCapstone-F23-S24/wsuag-arduinoapp/issues/7)
  * [Create Sprint 2 Report](https://github.com/WSUCptSCapstone-F23-S24/wsuag-arduinoapp/issues/23)
 
- Reminders (Remove this section when you save the file):
-  * Each issue should be assigned to a milestone
-  * Each completed issue should be assigned to a pull request
-  * Each completed pull request should include a link to a "Before and After" video
-  * All team members who contributed to the issue should be assigned to it on GitHub
-  * Each issue should be assigned story points using a label
-  * Story points contribution of each team member should be indicated in a comment
-
 
  ## Incomplete Issues/User Stories
  Here are links to issues we worked on but did not complete in this sprint:
