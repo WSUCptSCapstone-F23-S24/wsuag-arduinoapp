@@ -1,8 +1,8 @@
 # Sprint 2 Report 11/5/2023
 
 ## What's New (User Facing)
- * Reference Panel Detection Algorithm
- * Radiometric Correction
+ * Reference Panel Detection Algorithm: Our image detection model has been significantly enhanced, resulting in improved accuracy and performance. Additionally, we've introduced reference panel analysis to provide users with valuable insights into image data.
+ * Radiometric Correction: Development of scripts for obtaining constant color values, allowing for precise radiometric correction. We've also implemented image correction and normalization code, ensuring that image data is consistent and accurate, even in varying lighting conditions.
 
 
 ## Work Summary (Developer Facing)
