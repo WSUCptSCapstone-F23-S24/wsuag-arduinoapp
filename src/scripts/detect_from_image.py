@@ -161,7 +161,7 @@ def slice_into_boxes(image_path,out_folder,x,y,length):
     crop_box_1 = crop_img[(box_1_y_1 - zoom_out):(box_1_y_2 + zoom_out), (box_1_x_1 - zoom_out):(box_1_x_2 + zoom_out)]
     crop_box_2 = crop_img[(box_2_y_1 - zoom_out):(box_2_y_2 + zoom_out), (box_2_x_1 - zoom_out):(box_2_x_2 + zoom_out)]
     crop_box_3 = crop_img[(box_3_y_1 - zoom_out):(box_3_y_2 + zoom_out), (box_3_x_1 - zoom_out):(box_3_x_2 + zoom_out)]
-    render_rectangle = False
+    render_rectangle = True
     if render_rectangle:
         cv2.rectangle(crop_img, (box_1_x_1,box_1_y_1),
                       (box_1_x_2,box_1_y_2), (0,0,256), 1)
