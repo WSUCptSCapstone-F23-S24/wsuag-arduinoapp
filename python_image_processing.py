@@ -148,8 +148,8 @@ def slice_into_boxes(image_path,out_folder,x,y,length):
     print(out_folder+os.path.splitext(os.path.basename(image_path))[0] + "_box_1" + os.path.splitext(image_path)[1])
 
     cv2.imwrite(out_folder+"\\box_1\\"+os.path.splitext(os.path.basename(image_path))[0] + "_box_1" + os.path.splitext(image_path)[1],crop_box_1)
-    cv2.imwrite(out_folder+"\\box_2\\"+os.path.splitext(os.path.basename(image_path))[0] + "_box_2" + os.path.splitext(image_path)[1], crop_box_2)
-    cv2.imwrite(out_folder+"\\box_3\\"+os.path.splitext(os.path.basename(image_path))[0] + "_box_3" + os.path.splitext(image_path)[1], crop_box_3)
+    # cv2.imwrite(out_folder+"\\box_2\\"+os.path.splitext(os.path.basename(image_path))[0] + "_box_2" + os.path.splitext(image_path)[1], crop_box_2)
+    # cv2.imwrite(out_folder+"\\box_3\\"+os.path.splitext(os.path.basename(image_path))[0] + "_box_3" + os.path.splitext(image_path)[1], crop_box_3)
 
 slice_into_boxes("C:\\Users\\code8\\Documents\\Flood_fill_421\\12-05-2022_10-30-23_2.png","C:\\Users\\code8\\Documents\\Flood_fill_421\\with_buf\\",642,228,58)
 make_constant_csv("C:\\Users\\code8\\Documents\\Flood_fill_421\\with_buf\\")
