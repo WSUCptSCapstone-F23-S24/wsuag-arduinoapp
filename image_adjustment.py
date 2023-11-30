@@ -2,6 +2,7 @@
 
 #plot an array of arrays of 4 tuples: [[(335, 300), (450, 300), (360, 485), (185, 480)]]
 #varieties the type of wheat in the plot
+#r_b, r_g, r_r are the constant values for the camera
 def adjust_images(plots, varieties,r_b,r_g,r_r, in_path):
     # image size
     img_roi = 0
