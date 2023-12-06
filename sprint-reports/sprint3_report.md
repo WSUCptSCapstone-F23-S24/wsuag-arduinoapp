@@ -36,9 +36,11 @@ Please review the following code files, which were actively developed during thi
 ## Retrospective Summary
 Here's what went well:
    * We were able to complete all issues made for this sprint
-   * We were able to get some extra modifications done as well 
+   * We were able to get some extra modifications done as well
+     
 Here's what we'd like to improve:
    * Origanizations of the repo
    * Integration of subsystems
+     
 Here are changes we plan to implement in the next sprint (next semester):
    * Clean and consice code that is easy to read
