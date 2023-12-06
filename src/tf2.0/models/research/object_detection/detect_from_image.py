@@ -173,8 +173,8 @@ def slice_into_boxes(image_path,out_folder,x,y,length):
         cv2.imwrite(os.path.splitext(image_path)[0] + "_panel" + os.path.splitext(image_path)[1], crop_img)
     print(out_folder+os.path.splitext(os.path.basename(image_path))[0] + "_box_1" + os.path.splitext(image_path)[1])
     cv2.imwrite(out_folder+"\\box_1\\"+os.path.splitext(os.path.basename(image_path))[0] + "_box_1" + os.path.splitext(image_path)[1],crop_box_1)
-    cv2.imwrite(out_folder+"\\"+os.path.splitext(os.path.basename(image_path))[0] + "_box_2" + os.path.splitext(image_path)[1], crop_box_2)
-    cv2.imwrite(out_folder+"\\"+os.path.splitext(os.path.basename(image_path))[0] + "_box_3" + os.path.splitext(image_path)[1], crop_box_3)
+    #cv2.imwrite(out_folder+"\\"+os.path.splitext(os.path.basename(image_path))[0] + "_box_2" + os.path.splitext(image_path)[1], crop_box_2)
+    # cv2.imwrite(out_folder+"\\"+os.path.splitext(os.path.basename(image_path))[0] + "_box_3" + os.path.splitext(image_path)[1], crop_box_3)
     
     
 
@@ -223,6 +223,58 @@ def process_folder(folder_path):
         file.write(f"{blue_average} {green_average} {red_average}")
 
 
+def make_constant_csv(in_path):
+    r_in_path = in_path
+    r_in_data = [img for img in os.listdir(r_in_path) if img.endswith('.jpg')]
+    # Create an empty list to collect RGB data
+    sp_data = []
+    print('start')
+
+    # Loop to extract the vi
+
+    for file in r_in_data:
+        img = cv2.imread(os.path.join(r_in_path, file))  # Read the image
+        # Split the color band
+        b, g, r = cv2.split(img)
+        # Set list of data
+        sp = [b, g, r]
+        color = ['blue', 'green', 'red']
+        # Create an empty list to collect data of each spectrum in the loop
+        cl = []
+        # For loop to extract the RGB data
+
+        for s, c in zip(sp, color):
+            index = s
+
+            # Extract statistical data
+            mean = round(np.nanmean(s), 5)
+            median = round(np.nanmedian(s), 5)
+            std = round(np.nanstd(s), 5)
+            max = round(np.nanmax(s), 5)
+            p95 = round(np.nanpercentile(s, 95), 5)
+            p90 = round(np.nanpercentile(s, 90), 5)
+            p85 = round(np.nanpercentile(s, 85), 5)
+            date = Path(file[:].split('_')[0]).name
+            time = Path(file[:].split('_')[1]).name
+            date_time = date[:5] + '_' + time[:2]
+            rep_pic0 = Path(file[:].split('_')[-1]).name
+            rep_pic = rep_pic0.split('.')[0]
+            spectrum = c
+            # Make dictionary of extracted data for one color
+            data = [date, time, date_time, spectrum, mean, median, std, max, p95, p90, p85, rep_pic]
+            cl.append(data)
+
+        # Combine data from all spectrum
+        sp_data.extend(cl)
+
+    # Make a Datafram to save as a csv file
+
+    header = ['date', 'time', 'date_time', 'sprectrum', 'mean', 'median', 'std', 'max', 'p95', 'p90', 'p85', 'rep_pic']
+    df_final = pd.DataFrame(sp_data)
+    df_final.columns = header
+    df_final.to_csv(r_in_path + '\\' + "img_data" + '.csv', index=False)
+    print('finish')
+
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description='Object Detection from Images')
     parser.add_argument('-m', '--model', required=True, help='Path to the model directory')
@@ -236,4 +288,10 @@ if __name__ == "__main__":
     os.makedirs(args.output, exist_ok=True)
     detect_objects(model, category_index, args.images, args.output)
 
+    # make_constant_csv("src\\tf2.0\\models\\research\\object_detection\\output_images\\box_1")
+    
+    make_constant_csv("output_images\\box_1")
+
 # python .\detect_from_image.py -m .\_inference_graph\saved_model\ -l .\labelmap.pbtxt -i .\test_images\crop_test
+
+# python .\src\tf2.0\models\research\object_detection\detect_from_image.py -m .\src\tf2.0\models\research\object_detection\_inference_graph\saved_model\ -l .\src\tf2.0\models\research\object_detection\labelmap.pbtxt -i .\src\tf2.0\models\research\object_detection\test_images\crop_test
