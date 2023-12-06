@@ -29,7 +29,7 @@ Here are links to the issues that we completed in this sprint:
 
 Please review the following code files, which were actively developed during this sprint, for quality:
  * [detect_from_image.py](https://github.com/WSUCptSCapstone-F23-S24/wsuag-arduinoapp/blob/main/src/tf2.0/models/research/object_detection/detect_from_image.py)
- * [detect_from_image.py](https://github.com/WSUCptSCapstone-F23-S24/wsuag-arduinoapp/blob/main/src/tf2.0/models/research/object_detection/detect_and_image_process.py)
+ * [detect_and_image_process.py](https://github.com/WSUCptSCapstone-F23-S24/wsuag-arduinoapp/blob/main/src/tf2.0/models/research/object_detection/detect_and_image_process.py)
  * [plot_training.py](https://github.com/WSUCptSCapstone-F23-S24/wsuag-arduinoapp/blob/main/src/mrcnn_segmenting/kangaroo-transfer-learning/plot_training.py)
  * [plot_prediction.py](https://github.com/WSUCptSCapstone-F23-S24/wsuag-arduinoapp/blob/main/src/mrcnn_segmenting/kangaroo-transfer-learning/plot_prediction.py)
 
