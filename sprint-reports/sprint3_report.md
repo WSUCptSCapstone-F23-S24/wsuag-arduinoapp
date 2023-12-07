@@ -11,6 +11,7 @@ During Sprint 3, our team made significant progress towards completing the WSUAG
 We did not have any unfinished work in this sprint.
 
 
+
 ## Completed Issues/User Stories
 Here are links to the issues that we completed in this sprint:
 * [Develop initial plot segmentation model](https://github.com/WSUCptSCapstone-F23-S24/wsuag-arduinoapp/issues/32)
@@ -25,7 +26,6 @@ Here are links to the issues that we completed in this sprint:
 
 
 ## Code Files for Review
-
 Please review the following code files, which were actively developed during this sprint, for quality:
    * [detect_and_image_process.py](https://github.com/WSUCptSCapstone-F23-S24/wsuag-arduinoapp/blob/main/src/tf2.0/models/research/object_detection/detect_and_image_process.py)
    * [plot_training.py](https://github.com/WSUCptSCapstone-F23-S24/wsuag-arduinoapp/blob/main/src/mrcnn_segmenting/kangaroo-transfer-learning/plot_training.py)
@@ -44,3 +44,22 @@ Here's what we'd like to improve:
   
 Here are changes we plan to implement in the next sprint:
    * Create testing and verify all code is working as expected.
+
+
+Please review the following code files, which were actively developed during this sprint, for quality:
+ * [detect_from_image.py](https://github.com/WSUCptSCapstone-F23-S24/wsuag-arduinoapp/blob/main/src/tf2.0/models/research/object_detection/detect_from_image.py)
+ * [detect_and_image_process.py](https://github.com/WSUCptSCapstone-F23-S24/wsuag-arduinoapp/blob/main/src/tf2.0/models/research/object_detection/detect_and_image_process.py)
+ * [plot_training.py](https://github.com/WSUCptSCapstone-F23-S24/wsuag-arduinoapp/blob/main/src/mrcnn_segmenting/kangaroo-transfer-learning/plot_training.py)
+ * [plot_prediction.py](https://github.com/WSUCptSCapstone-F23-S24/wsuag-arduinoapp/blob/main/src/mrcnn_segmenting/kangaroo-transfer-learning/plot_prediction.py)
+
+## Retrospective Summary
+Here's what went well:
+   * We were able to complete all issues made for this sprint
+   * We were able to get some extra modifications done as well
+     
+Here's what we'd like to improve:
+   * Origanizations of the repo
+   * Integration of subsystems
+     
+Here are changes we plan to implement in the next sprint (next semester):
+   * Clean and consice code that is easy to read
