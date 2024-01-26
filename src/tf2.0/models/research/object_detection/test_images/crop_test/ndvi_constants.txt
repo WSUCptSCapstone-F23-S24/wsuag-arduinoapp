@@ -1,7 +1,0 @@
-mean_ndvi: inf
-median_ndvi: 0.125085
-std_ndvi: nan
-max_ndvi: inf
-p95_ndvi: 0.35001000000000004
-p90_ndvi: 0.290015
-p85_ndvi: 0.26707
