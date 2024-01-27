@@ -76,10 +76,11 @@ def get_input_files_list(folder):
         if file.endswith(".png"):
            dir_list.append( os.path.join(folder, file))
 
-    return dir_list
+    print(dir_list[0:10])
+    return dir_list[0:10]
 
 
-input_images = ["02-08-2022_12-00-05_1.png", "02-07-2022_10-30-04_1.png"]
+input_images = get_input_files_list("C:\\Users\\code8\\Downloads\\6\\6") #["02-08-2022_12-00-05_1.png", "02-07-2022_10-30-04_1.png"]
 
 results = model(input_images)  # return a list of Results objects
 
@@ -95,8 +96,18 @@ for i in range(0,len(input_images)):
     print(result.boxes.cls)
 
     box_index = 0
-    while int(result.boxes.cls[box_index]) != 1:
+    print(result.boxes.cls)
+    
+    found_box = True
+    
+    while int(result.boxes.cls[box_index]) != 1 :
         box_index += 1
+        if box_index >= len(result.boxes.cls):
+            found_box = False
+            break
+    if not found_box:
+        print(f"error could not find reference panelon image: {image}")
+        continue
 
     box_bounding_box = box_bounding_list[box_index]
 
