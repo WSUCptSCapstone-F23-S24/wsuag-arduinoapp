@@ -2,7 +2,7 @@ task: segment
 mode: train
 model: yolov8m-seg.pt
 data: dataset.yaml
-epochs: 100
+epochs: 500
 time: null
 patience: 50
 batch: 8
