@@ -8,7 +8,144 @@ import pandas as pd
 from pathlib import Path
 
 
-def slice_into_boxes(image_path,out_folder,x,y,length,buffer=0,zoom_out=0):
+
+
+
+
+
+
+# gets the baseline values to adjust all the reference plates against
+# path to csv file
+def get_image_adjustment_baseline(cam_name, in_path):
+    # Input data
+    cam = cam_name
+    # Input path
+    #in_path = input_path_folder #'D:/Data1/Paper_IoT/0_Raw_Data/2022/0_IoT_Image/WinterWheat/Data_Final/' + cam + '/Final_Ref'  # change
+
+    # Read data
+    df = pd.read_csv(in_path, parse_dates=['date'], index_col='date').sort_index()
+    # Select targeted data
+    value = 'max'
+    ref_val = df[['sprectrum', value]]
+    r = ref_val[df['sprectrum'] == 'red'][-10:]  # Select only the last ten days data
+    g = ref_val[df['sprectrum'] == 'green'][-10:]
+    b = ref_val[df['sprectrum'] == 'blue'][-10:]
+
+    # Find median value
+    b_med = round(np.nanmedian(b[[value]]), 5)  # Blue
+    g_med = round(np.nanmedian(g[[value]]), 5)  # Green
+    r_med = round(np.nanmedian(r[[value]]), 5)  # Red
+
+    # Make a list for ref values (row direction)
+    data = [[b_med, g_med, r_med]]
+
+    # Make a Dataframe to save as a csv file
+    header = ['blue', 'green', 'red']
+    df_final = pd.DataFrame(data)
+    df_final.columns = header
+    df_final.to_csv(in_path+"out.csv", index=False)
+    return [b_med,g_med,r_med]
+
+
+
+# Create an empty list to collect RGB data
+def make_constant_csv(in_path):
+    r_in_path = in_path
+
+    r_in_path = r_in_path
+
+    r_in_data = [img for img in os.listdir(r_in_path) if img.endswith('.png')]
+
+    # Create an empty list to collect RGB data
+
+    sp_data = []
+
+    print('start')
+
+    # Loop to extract the vi
+
+    for file in r_in_data:
+
+        img = cv2.imread(os.path.join(r_in_path, file))  # Read the image
+
+        # Split the color band
+
+        b, g, r = cv2.split(img)
+
+        # Set list of data
+
+        sp = [b, g, r]
+
+        color = ['blue', 'green', 'red']
+
+        # Create an empty list to collect data of each spectrum in the loop
+
+        cl = []
+
+        # For loop to extract the RGB data
+
+        for s, c in zip(sp, color):
+            index = s
+
+            # Extract statistical data
+
+            mean = round(np.nanmean(s), 5)
+
+            median = round(np.nanmedian(s), 5)
+
+            std = round(np.nanstd(s), 5)
+
+            max = round(np.nanmax(s), 5)
+
+            p95 = round(np.nanpercentile(s, 95), 5)
+
+            p90 = round(np.nanpercentile(s, 90), 5)
+
+            p85 = round(np.nanpercentile(s, 85), 5)
+
+            date = Path(file[:].split('_')[0]).name
+
+            time = Path(file[:].split('_')[1]).name
+
+            date_time = date[:5] + '_' + time[:2]
+
+            rep_pic0 = Path(file[:].split('_')[-1]).name
+
+            rep_pic = rep_pic0.split('.')[0]
+
+            spectrum = c
+
+            # Make dictionary of extracted data for one color
+
+            data = [date, time, date_time, spectrum, mean, median, std, max, p95, p90, p85, rep_pic]
+
+            cl.append(data)
+
+        # Combine data from all spectrum
+
+        sp_data.extend(cl)
+
+    # Make a Datafram to save as a csv file
+
+    header = ['date', 'time', 'date_time', 'sprectrum', 'mean', 'median', 'std', 'max', 'p95', 'p90', 'p85', 'rep_pic']
+
+    df_final = pd.DataFrame(sp_data)
+
+    df_final.columns = header
+
+    df_final.to_csv(in_path + '\\' + "results" + '.csv', index=False)
+
+    print('finish')
+
+
+
+
+
+
+
+
+#last three parameter are for debug purposes only.
+def slice_into_boxes(image_path,out_folder,x,y,length,buffer=0,zoom_out=0,render_rectangle=False):
     print(f"image path {image_path}")
 
 
@@ -34,7 +171,7 @@ def slice_into_boxes(image_path,out_folder,x,y,length,buffer=0,zoom_out=0):
 
     #crop_img = img[y:int(y+(length*(height_base/length_base))), x:int(x+length)]
     box_length =  int(length * (box_size_base / length_base))
-   # cv2.rectangle(crop_img, (x, y), (int(x+length), int(y+(length*(height_base/length_base)))), (0, 0, 256), 1)
+    cv2.rectangle(crop_img, (x, y), (int(x+length), int(y+(length*(height_base/length_base)))), (0, 0, 256), 1)
     box_1_x_1 = int(x+first_box_offset_x+buffer)
     box_1_y_1 = int(y+first_box_offset_y+buffer)
     box_1_x_2 = int((x+first_box_offset_x+box_length)-(buffer))
@@ -53,7 +190,7 @@ def slice_into_boxes(image_path,out_folder,x,y,length,buffer=0,zoom_out=0):
     crop_box_1 = crop_img[(box_1_y_1 - zoom_out):(box_1_y_2 + zoom_out), (box_1_x_1 - zoom_out):(box_1_x_2 + zoom_out)]
     crop_box_2 = crop_img[(box_2_y_1 - zoom_out):(box_2_y_2 + zoom_out), (box_2_x_1 - zoom_out):(box_2_x_2 + zoom_out)]
     crop_box_3 = crop_img[(box_3_y_1 - zoom_out):(box_3_y_2 + zoom_out), (box_3_x_1 - zoom_out):(box_3_x_2 + zoom_out)]
-    render_rectangle = True
+    
     print(f"area {(box_1_x_1-box_1_x_2)*(box_1_y_2-box_1_y_1)}")
     if render_rectangle:
         cv2.rectangle(crop_img, (box_1_x_1,box_1_y_1),
@@ -85,14 +222,14 @@ def get_input_files_list(folder):
         if file.endswith(".png"):
            dir_list.append( os.path.join(folder, file))
     #print(dir_list[0:8])
-    return dir_list[0:8]
+    return dir_list[0:15]
 
 
 input_images = get_input_files_list("C:\\Users\\code8\\Downloads\\5 (1)\\5") #["02-08-2022_12-00-05_1.png", "02-07-2022_10-30-04_1.png"]
 
 results = model(input_images)  # return a list of Results objects
 
-
+invalid_images = []
 
 for i in range(0,len(input_images)):
     result = results[i]
@@ -115,7 +252,7 @@ for i in range(0,len(input_images)):
             found_box = False
             break
     if not found_box:
-        print(f"error could not find reference panelon image: {image}")
+        invalid_images.append(invalid_images)
         continue
 
     box_bounding_box = box_bounding_list[box_index]
@@ -126,8 +263,15 @@ for i in range(0,len(input_images)):
     # cv2.rectangle(img, corner_1, corner_2, color=(255,0,0), thickness=1)
     # cv2.imwrite("./test_results/" + image, img)   
     print("before")
-    slice_into_boxes(image,"C:\\421_project\\wsuag-arduinoapp\\test_results",corner_1[0],corner_1[1],corner_2[0]-corner_1[0],1,50)
+    slice_into_boxes(image,"C:\\421_project\\wsuag-arduinoapp\\test_results",corner_1[0],corner_1[1],corner_2[0]-corner_1[0])
     print("after")
+if len(invalid_images) > 0:
+    print("could not find panel on images:")
+    for i in range(0,len(invalid_images)):
+        print(invalid_images[i])
 
+make_constant_csv("C:\\421_project\\wsuag-arduinoapp\\test_results")
 
+values_base = get_image_adjustment_baseline("test","C:\\421_project\\wsuag-arduinoapp\\test_results\\results.csv")
 
+print(values_base)
