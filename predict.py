@@ -84,11 +84,11 @@ def get_input_files_list(folder):
     for file in os.listdir(folder):
         if file.endswith(".png"):
            dir_list.append( os.path.join(folder, file))
-    print(dir_list[0:8])
+    #print(dir_list[0:8])
     return dir_list[0:8]
 
 
-input_images = get_input_files_list("C:\\Users\\code8\\Downloads\\6 (3)\\6") #["02-08-2022_12-00-05_1.png", "02-07-2022_10-30-04_1.png"]
+input_images = get_input_files_list("C:\\Users\\code8\\Downloads\\5 (1)\\5") #["02-08-2022_12-00-05_1.png", "02-07-2022_10-30-04_1.png"]
 
 results = model(input_images)  # return a list of Results objects
 
