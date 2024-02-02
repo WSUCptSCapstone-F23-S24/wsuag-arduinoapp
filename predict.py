@@ -3,10 +3,13 @@ import cv2 as cv
 import numpy as np
 from ultralytics import YOLO
 
+model2 = YOLO('yolo-obb.pt')
 model = YOLO('yolov8m-seg-custom.pt')
 
-results = model.predict(source="03-06-2022_12-01-16_5.png")
+imgT = "c.png"
 
+results = model.predict(source=imgT, conf=0.8)
+results2 = model2.predict(source=imgT, conf=0.2, save = True, hide_conf=True, hide_labels=True)
 
 for result in results:
     img = np.copy(result.orig_img)
@@ -20,7 +23,7 @@ for result in results:
             class_id = int(box.data[0][-1])
             label = model.names[class_id]
 
-        if label == 'box':
+        if label == 't':
             x1, y1, x2, y2 = contour.boxes.xyxy.cpu().numpy().squeeze().astype(np.int32)
             isolated_crop = img[y1:y2, x1:x2]
         else:
@@ -41,5 +44,27 @@ for result in results:
             isolated_crop = isolated[y1:y2, x1:x2]
 
         output_filename = f"isolated_{img_name}_{contour_idx}.png"
+        cv.imwrite(output_filename, isolated_crop)
+        print(f"Isolated image saved: {output_filename}")
+
+
+for result in results2:
+    img = np.copy(result.orig_img)
+    img_name = Path(result.path).stem  
+
+    for contour_idx, contour in enumerate(result):
+
+        # label = result.names[result.boxes.cls.tolist().pop()]
+        print(contour.obb)
+        label = ""
+        for box in contour.obb:
+            class_id = int(box.data[0][-1])
+            label = model.names[class_id]
+
+        
+        x1, y1, x2, y2 = contour.obb.xyxy.cpu().numpy().squeeze().astype(np.int32)
+        isolated_crop = img[y1:y2, x1:x2]
+
+        output_filename = f"isolated_{img_name}_{contour_idx}_obb.png"
         cv.imwrite(output_filename, isolated_crop)
         print(f"Isolated image saved: {output_filename}")
