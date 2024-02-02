@@ -1,0 +1,6 @@
+train: D:\condaEnv\train
+val: D:\condaEnv\valid
+test: D:\condaEnv\test
+
+nc: 1
+names: ['box']
