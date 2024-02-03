@@ -63,6 +63,7 @@ When pulling the repo some files are not acccessbile so we have to run these com
   * [Sprint 1 Report](https://github.com/WSUCptSCapstone-F23-S24/wsuag-arduinoapp/blob/main/sprint-reports/sprint1_report.md)
   * [Sprint 2 Report](https://github.com/WSUCptSCapstone-F23-S24/wsuag-arduinoapp/blob/main/sprint-reports/sprint2_report.md)
   * [Sprint 3 Report](https://github.com/WSUCptSCapstone-F23-S24/wsuag-arduinoapp/blob/main/sprint-reports/sprint3_report.md)
+  * [Sprint 4 Report](https://github.com/WSUCptSCapstone-F23-S24/wsuag-arduinoapp/blob/main/sprint-reports/sprint4_report.md)
   * [Video Demos](https://github.com/WSUCptSCapstone-F23-S24/wsuag-arduinoapp/blob/main/video-demos.md)
   * [Project Description](https://github.com/WSUCptSCapstone-F23-S24/wsuag-arduinoapp/blob/main/Project_Description.pdf)
   * [Solution Approach](https://github.com/WSUCptSCapstone-F23-S24/wsuag-arduinoapp/blob/main/Solution_Approach.pdf)
