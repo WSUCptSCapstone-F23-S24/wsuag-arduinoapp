@@ -26,11 +26,12 @@ See [conda_libraries.txt](https://github.com/WSUCptSCapstone-F23-S24/wsuag-ardui
 
 Steps: \
 Clone repo - `git clone https://github.com/WSUCptSCapstone-F23-S24/wsuag-arduinoapp.git` \
-Install [protobuf](https://github.com/protocolbuffers/protobuf/releases): download release for your device type \
-Download [anaconda](https://www.anaconda.com/) \
-In anaconda Prompt: \
-  `conda create -n tf2 pip python=3.9` \
-  `conda activate tf2` 
+Either use the installation script by running `python .\installation\setup.py` \
+If that fails, in the terminal do the following: \
+Create a python virtual environment by running `python -m venv yolo8_venv` \
+Activate the environment by running `.\yolo8_venv\Scripts\activate` \
+Run `python -m pip install -r installation\requirements.txt` to install all the relevant packages \
+Finally, you are able to run the program, with `python predict.py`
 
 
 ## Functionality
