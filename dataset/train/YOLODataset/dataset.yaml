@@ -1,5 +1,0 @@
-train: dataset/train\YOLODataset/images/train/
-val: dataset/train\YOLODataset/images/val/
-test: dataset/train\YOLODataset/images/test/
-nc: 0
-names: []

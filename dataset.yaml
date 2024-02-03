@@ -1,4 +1,0 @@
-train: D:\condaEnv\train
-val: D:\condaEnv\test
-nc: 2
-names: ["field", "box"]
