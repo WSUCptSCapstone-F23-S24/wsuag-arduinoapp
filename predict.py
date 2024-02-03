@@ -95,10 +95,11 @@ def get_image_adjustment_baseline(cam_name, in_path):
 def make_constant_csv(in_path):
     r_in_path = in_path
 
-    r_in_path = r_in_path
+    r_in_path = os.path.abspath(r_in_path)
 
     r_in_data = [img for img in os.listdir(r_in_path) if img.endswith('.png')]
-
+    print(len(r_in_data))
+    
     # Create an empty list to collect RGB data
 
     sp_data = []
@@ -170,13 +171,14 @@ def make_constant_csv(in_path):
 
     # Make a Datafram to save as a csv file
 
+    
     header = ['date', 'time', 'date_time', 'sprectrum', 'mean', 'median', 'std', 'max', 'p95', 'p90', 'p85', 'rep_pic']
 
     df_final = pd.DataFrame(sp_data)
 
     df_final.columns = header
 
-    df_final.to_csv(in_path + '\\' + "results" + '.csv', index=False)
+    df_final.to_csv(in_path + '/' + "results" + '.csv', index=False)
 
     print('finish')
 
@@ -267,7 +269,7 @@ def get_input_files_list(folder):
     #print(dir_list[0:8])
     return dir_list[0:15]
 
-
+#REPLACE THIS WITH YOUR LOCATION
 input_images = get_input_files_list("C:\\Users\\code8\\Downloads\\5 (1)\\5") #["02-08-2022_12-00-05_1.png", "02-07-2022_10-30-04_1.png"]
 
 results = model(input_images, conf=0.8)  # return a list of Results objects
@@ -306,17 +308,17 @@ for i in range(0,len(input_images)):
     # cv2.rectangle(img, corner_1, corner_2, color=(255,0,0), thickness=1)
     # cv2.imwrite("./test_results/" + image, img)   
     print("before")
-    slice_into_boxes(image,"C:\\421_project\\wsuag-arduinoapp\\test_results",corner_1[0],corner_1[1],corner_2[0]-corner_1[0],3,100,True)
+    slice_into_boxes(image,".\\test_results",corner_1[0],corner_1[1],corner_2[0]-corner_1[0],3)
     print("after")
 if len(invalid_images) > 0:
     print("could not find panel on images:")
     for i in range(0,len(invalid_images)):
         print(invalid_images[i])
 
-make_constant_csv("C:\\421_project\\wsuag-arduinoapp\\test_results")
+make_constant_csv("./test_results")
 
-values_base = get_image_adjustment_baseline("test","C:\\421_project\\wsuag-arduinoapp\\test_results\\results.csv")
+values_base = get_image_adjustment_baseline("test","./test_results/results.csv")
 
 print(values_base)
 
-image_adjustment_data("test","C:\\421_project\\wsuag-arduinoapp\\test_results\\results.csv",values_base)
+image_adjustment_data("test","./test_results/results.csv",values_base)
