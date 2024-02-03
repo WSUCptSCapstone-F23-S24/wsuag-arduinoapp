@@ -227,7 +227,7 @@ def get_input_files_list(folder):
 
 input_images = get_input_files_list("C:\\Users\\code8\\Downloads\\5 (1)\\5") #["02-08-2022_12-00-05_1.png", "02-07-2022_10-30-04_1.png"]
 
-results = model(input_images)  # return a list of Results objects
+results = model(input_images, conf=0.8)  # return a list of Results objects
 
 invalid_images = []
 
@@ -263,7 +263,7 @@ for i in range(0,len(input_images)):
     # cv2.rectangle(img, corner_1, corner_2, color=(255,0,0), thickness=1)
     # cv2.imwrite("./test_results/" + image, img)   
     print("before")
-    slice_into_boxes(image,"C:\\421_project\\wsuag-arduinoapp\\test_results",corner_1[0],corner_1[1],corner_2[0]-corner_1[0])
+    slice_into_boxes(image,"C:\\421_project\\wsuag-arduinoapp\\test_results",corner_1[0],corner_1[1],corner_2[0]-corner_1[0],3,100,True)
     print("after")
 if len(invalid_images) > 0:
     print("could not find panel on images:")
@@ -275,3 +275,77 @@ make_constant_csv("C:\\421_project\\wsuag-arduinoapp\\test_results")
 values_base = get_image_adjustment_baseline("test","C:\\421_project\\wsuag-arduinoapp\\test_results\\results.csv")
 
 print(values_base)
+
+
+
+# def adjust_image(vi, varieties,r_b,r_g,r_r, in_path):
+#     # image size
+#     img_roi = 0
+
+#     # Create a list of data in directory
+#     in_path = in_path
+#     in_data = [img for img in os.listdir(in_path) if img.endswith('.png')]
+
+#     #vi = 'ndvi'
+
+#     # Image size
+#     i_w = 1280
+#     i_h = 1248
+
+#     vi_data = []
+
+#     print('start')
+#     # Loop to extract the vi
+#     file = os.path.basename(in_path)
+#     img = cv2.imread(in_path)  # Read the image
+#     img = img[img_roi:900, i_w:2496]  # Resize the image
+
+#     # Split the color band
+#     b, g, r = cv2.split(img)
+#     b = r_b * b
+#     g = r_g * g
+#     r = r_r * r
+
+#     # Calculate the ndvi
+#     index = ((1.664 * (b.astype(float))) / (0.953 * (r.astype(float)))) - 1
+#     # Create black image for masking
+#     blank = np.zeros(index.shape[:2], dtype='uint8')
+
+#     # Mask location on the image
+
+#     nd = []
+
+    
+#     # Mask the plot in left side
+#     #pl_m = cv2.fillPoly(blank, np.array([pl]), 255)
+#     m = cv2.bitwise_and(index, index, mask=pl_m)
+#     m[m == 256] = np.nan  # Replace zero value to nan
+#     mean_m = round(np.nanmean(m), 5)
+#     median_m = round(np.nanmedian(m), 5)
+#     std_m = round(np.nanstd(m), 5)
+#     max_m = round(np.nanmax(m), 5)
+#     p95_m = round(np.nanpercentile(m, 95), 5)
+#     p90_m = round(np.nanpercentile(m, 90), 5)
+#     p85_m = round(np.nanpercentile(m, 85), 5)
+#     date = Path(file[:].split('_')[0]).name
+#     time = Path(file[:].split('_')[1]).name
+#     date_time = date[:5] + '_' + time[:2]
+#     rep_pic = file[-5]
+#     variety = var[0]
+#     rep_var = var[-1]
+#     vi = vi
+
+#         # Make dictionary for ndvi of one plot
+#     data = [date, time, date_time, variety, rep_var, vi, mean_m, median_m, std_m, max_m, p95_m, p90_m, p85_m,
+#             rep_pic]
+#     nd.append(data)
+#     # Combine data from all images
+#     vi_data.extend(nd)
+#     # Make a Datafram to save as a csv file
+#     header = ['date', 'time', 'date_time', 'variety', 'rep_var', 'vi', 'mean', 'median', 'std', 'max', 'p95', 'p90',
+#               'p85',
+#               'rep_pic']
+#     df_final = pd.DataFrame(vi_data)
+#     df_final.columns = header
+#     df_final.to_csv(vi + '.csv')
+#     print('finish')
