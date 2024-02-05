@@ -8,6 +8,10 @@ import pandas as pd
 from pathlib import Path
 
 
+
+
+
+
 def image_adjustment_data(cam_name, in_path, med_arr):
     cam = 'AG9'
     month = '5'
@@ -88,6 +92,126 @@ def get_image_adjustment_baseline(cam_name, in_path):
     df_final.columns = header
     df_final.to_csv(in_path+"out.csv", index=False)
     return [b_med,g_med,r_med]
+
+
+
+
+
+
+def get_plot_mask(img_in_path):
+   
+    model = YOLO('yolov8m-seg-custom.pt')
+
+    imgT = img_in_path
+
+    results = model.predict(source=imgT, conf=0.8)
+    plot_masks = []
+
+    for result in results:
+        img = np.copy(result.orig_img)
+        img_name = Path(result.path).stem  
+
+        for contour_idx, contour in enumerate(result):
+
+            # label = result.names[result.boxes.cls.tolist().pop()]
+            label = ""
+            for box in contour.boxes:
+                class_id = int(box.data[0][-1])
+                label = model.names[class_id]
+
+            if label == 'box':
+                x1, y1, x2, y2 = contour.boxes.xyxy.cpu().numpy().squeeze().astype(np.int32)
+                isolated_crop = img[y1:y2, x1:x2]
+            else:
+                binary_mask = np.zeros(img.shape[:2], np.uint8)
+
+                contour_xy = contour.masks.xy.pop()
+                contour_xy = contour_xy.astype(np.int32)
+                contour_xy = contour_xy.reshape(-1, 1, 2)
+
+                _ = cv2.drawContours(binary_mask, [contour_xy], -1, (255, 255, 255), cv2.FILLED)
+
+       
+
+                mask3ch = cv2.cvtColor(binary_mask, cv2.COLOR_GRAY2BGR)
+                plot_masks.append(binary_mask)
+
+                # imS = cv2.resize(mask3ch, (960, 540))
+                # cv2.imshow("i", imS)
+                # key = cv2.waitKey()
+                # isolated = cv2.bitwise_and(mask3ch, img)
+
+                # isolated_with_transparent_bg = np.dstack([img, binary_mask])
+
+                # x1, y1, x2, y2 = contour.boxes.xyxy.cpu().numpy().squeeze().astype(np.int32)
+                # isolated_crop = isolated[y1:y2, x1:x2]
+
+            # output_filename = f"isolated_{img_name}_{contour_idx}.png"
+            # cv.imwrite(output_filename, isolated_crop)
+            # print(f"Isolated image saved: {output_filename}")
+    return plot_masks
+                
+
+def adjust_image(r_b,r_g,r_r,img_path, plots, varieties):
+    img = cv2.imread(img_path) # Read the image
+    i_w = 1280
+    i_h = 1248
+    img_roi = 0
+    #img = img[img_roi:900, i_w:2496] # Resize the image
+   
+    # Split the color band
+    b, g, r = cv2.split(img)
+    b = r_b * b
+    g = r_g * g
+    r = r_r * r
+    vi_data = []
+ 
+    # Calculate the ndvi
+    index = ((1.664*(b.astype(float))) / (0.953*(r.astype(float)))) - 1
+    # Create black image for masking
+    blank = np.zeros(index.shape[:2], dtype='uint8')
+    print(index)
+    cv2.imshow("i", img)
+    key = cv2.waitKey()
+
+    nd = []
+
+    for pl in plots:
+        # Mask the plot in left side
+        # pl_m = cv2.fillPoly(blank, np.array([pl]), 255)
+        # cv2.imshow("i", pl_m)
+        # key = cv2.waitKey()
+        #plots = plots[img_roi:900, i_w:2496] 
+        m = cv2.bitwise_and(index, index, mask=pl)
+        m[m <= 0] = np.nan  # Replace zero value to nan
+        mean_m = round(np.nanmean(m), 5)
+        median_m = round(np.nanmedian(m), 5)
+        std_m = round(np.nanstd(m), 5)
+        max_m = round(np.nanmax(m), 5)
+        p95_m = round(np.nanpercentile(m, 95), 5)
+        p90_m = round(np.nanpercentile(m, 90), 5)
+        p85_m = round(np.nanpercentile(m, 85), 5)
+        
+
+        # Make dictionary for ndvi of one plot
+        data = [mean_m, median_m, std_m, max_m, p95_m, p90_m, p85_m,img_path]
+        nd.append(data)
+    print(nd)
+   
+    vi_data.extend(nd)
+
+    header = [ 'mean', 'median', 'std', 'max', 'p95', 'p90',
+              'p85',
+              'imgpath']
+    df_final = pd.DataFrame(vi_data)
+    df_final.columns = header
+
+    print(df_final)
+    # Mask location on the image
+    # plot = [pl1, pl2, pl3]
+    # var = [v1, v2, v3]
+    # nd = []
+
 
 
 
@@ -322,3 +446,4 @@ values_base = get_image_adjustment_baseline("test","./test_results/results.csv")
 print(values_base)
 
 image_adjustment_data("test","./test_results/results.csv",values_base)
+
