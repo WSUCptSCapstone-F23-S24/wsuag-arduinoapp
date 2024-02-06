@@ -95,7 +95,45 @@ def get_image_adjustment_baseline(cam_name, in_path):
 
 
 
+def get_r_g_b_constant_value(input_csv_path, input_image_path):
+ 
 
+
+
+    file = Path(os.path.basename(input_image_path)).stem
+
+
+    date = Path(file[:].split('_')[0]).name
+
+    time1 = Path(file[:].split('_')[1]).name
+
+    date_time = date[:5] + '_' + time1[:2]
+
+    rep_pic0 = Path(file[:].split('_')[-1]).name
+
+    rep_pic = rep_pic0.split('.')[0]
+
+    df = pd.read_csv(input_csv_path)
+
+    #print(rep_pic)
+    #print(df[(df['rep_pic'] == rep_pic)])
+    
+    #print(df[(df['date'] == date)])
+    print( df[(df['date'] == date)&(df['time'] == time1)&(df['sprectrum'] == "red")])
+    print("**********")
+    test = df[(df['date'] == date)&(df['time'] == time1)&(df['sprectrum'] == "red")]
+    print(test.iloc[0]["constant_ref"] )
+
+    
+
+    blue = df[(df['date'] == date)&(df['time'] == time1)&(df['sprectrum'] == "blue")].iloc[0]["constant_ref"]
+    green = df[(df['date'] == date)&(df['time'] == time1)&(df['sprectrum'] == "green")].iloc[0]["constant_ref"]
+    red = df[(df['date'] == date)&(df['time'] == time1)&(df['sprectrum'] == "red")].iloc[0]["constant_ref"]
+    result = (blue,green,red)
+    print(red)
+    print(type(red))
+
+    return result
 
 
 def get_plot_mask(img_in_path):
@@ -110,6 +148,8 @@ def get_plot_mask(img_in_path):
     for result in results:
         img = np.copy(result.orig_img)
         img_name = Path(result.path).stem  
+
+
 
         for contour_idx, contour in enumerate(result):
 
@@ -134,7 +174,8 @@ def get_plot_mask(img_in_path):
        
 
                 mask3ch = cv2.cvtColor(binary_mask, cv2.COLOR_GRAY2BGR)
-                plot_masks.append(binary_mask)
+                x1, y1, x2, y2 = contour.boxes.xyxy.cpu().numpy().squeeze().astype(np.int32)
+                plot_masks.append((x1,binary_mask))
 
                 # imS = cv2.resize(mask3ch, (960, 540))
                 # cv2.imshow("i", imS)
@@ -149,6 +190,10 @@ def get_plot_mask(img_in_path):
             # output_filename = f"isolated_{img_name}_{contour_idx}.png"
             # cv.imwrite(output_filename, isolated_crop)
             # print(f"Isolated image saved: {output_filename}")
+    #sorts array by the x value of the top left corner 
+    plot_masks = sorted(plot_masks,key=lambda x : x[0])
+    plot_masks = [i[1] for i in plot_masks]
+
     return plot_masks
                 
 
@@ -171,8 +216,8 @@ def adjust_image(r_b,r_g,r_r,img_path, plots, varieties):
     # Create black image for masking
     blank = np.zeros(index.shape[:2], dtype='uint8')
     print(index)
-    cv2.imshow("i", img)
-    key = cv2.waitKey()
+    # cv2.imshow("i", img)
+    # key = cv2.waitKey()
 
     nd = []
 
@@ -256,6 +301,9 @@ def make_constant_csv(in_path):
             index = s
 
             # Extract statistical data
+            
+
+
 
             mean = round(np.nanmean(s), 5)
 
@@ -441,9 +489,16 @@ if len(invalid_images) > 0:
 
 make_constant_csv("./test_results")
 
-values_base = get_image_adjustment_baseline("test","./test_results/results.csv")
+med_arr = get_image_adjustment_baseline("test","./test_results/results.csv")
 
-print(values_base)
 
-image_adjustment_data("test","./test_results/results.csv",values_base)
+
+image_adjustment_data("test","./test_results/results.csv",med_arr)
+
+for i in input_images:
+    print(i)
+    plots = get_plot_mask(i)
+    b,g,r = get_r_g_b_constant_value("./test_results/results.csv",i)
+    adjust_image(b,g,r,i,plots,["1","2","3","4","5"])
+    break
 
