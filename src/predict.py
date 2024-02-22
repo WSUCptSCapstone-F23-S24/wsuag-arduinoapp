@@ -330,11 +330,11 @@ import numpy as np
 from ultralytics import YOLO
 
 model2 = YOLO('yolo-obb.pt')
-model = YOLO('yolov8m-seg-custom-2.pt')
+model = YOLO('yolov8m-seg-custom-4.pt')
 
-imgT = "02-07-2022_10-30-04_1.png"
+imgT = "12-05-2022_10-30-40.3.png"
 
-results = model.predict(source=imgT, conf=0.8)
+results = model.predict(source=imgT, conf=0.2)
 results2 = model2.predict(source=imgT, conf=0.2, save = True, hide_conf=True, hide_labels=True)
 
 for result in results:

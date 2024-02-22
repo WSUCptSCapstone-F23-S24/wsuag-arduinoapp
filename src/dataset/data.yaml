@@ -1,0 +1,13 @@
+train: ../train/images
+val: ../valid/images
+test: ../test/images
+
+nc: 2
+names: ['box', 'field']
+
+roboflow:
+  workspace: shreyas-zmpfq
+  project: fields2
+  version: 1
+  license: CC BY 4.0
+  url: https://universe.roboflow.com/shreyas-zmpfq/fields2/dataset/1
