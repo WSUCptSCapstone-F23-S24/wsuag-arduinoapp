@@ -121,8 +121,8 @@ def get_r_g_b_constant_value(input_csv_path, input_image_path):
     #print(df[(df['date'] == date)])
     print( df[(df['date'] == date)&(df['time'] == time1)&(df['sprectrum'] == "red")])
     print("**********")
-    test = df[(df['date'] == date)&(df['time'] == time1)&(df['sprectrum'] == "red")]
-    print(test.iloc[0]["constant_ref"] )
+   # test = df[(df['date'] == date)&(df['time'] == time1)&(df['sprectrum'] == "red")]
+    #print(test.iloc[0]["constant_ref"] )
 
     
 
@@ -135,10 +135,10 @@ def get_r_g_b_constant_value(input_csv_path, input_image_path):
 
     return result
 
-
-def get_plot_mask(img_in_path):
+plot_model = YOLO('yolov8m-seg-custom-2.pt')
+def get_plot_mask(img_in_path,model):
    
-    model = YOLO('yolov8m-seg-custom.pt')
+  
 
     imgT = img_in_path
 
@@ -197,7 +197,7 @@ def get_plot_mask(img_in_path):
     return plot_masks
                 
 
-def adjust_image(r_b,r_g,r_r,img_path, plots, varieties):
+def adjust_image(r_b,r_g,r_r,img_path, plots, varieties, ndvi_data_in):
     img = cv2.imread(img_path) # Read the image
     i_w = 1280
     i_h = 1248
@@ -209,7 +209,7 @@ def adjust_image(r_b,r_g,r_r,img_path, plots, varieties):
     b = r_b * b
     g = r_g * g
     r = r_r * r
-    vi_data = []
+    vi_data = ndvi_data_in
  
     # Calculate the ndvi
     index = ((1.664*(b.astype(float))) / (0.953*(r.astype(float)))) - 1
@@ -221,10 +221,10 @@ def adjust_image(r_b,r_g,r_r,img_path, plots, varieties):
 
     nd = []
 
-    for pl in plots:
+    for var, pl in zip(varieties,plots):
         # Mask the plot in left side
         # pl_m = cv2.fillPoly(blank, np.array([pl]), 255)
-        # cv2.imshow("i", pl_m)
+        # cv2.imshow("i", pl)
         # key = cv2.waitKey()
         #plots = plots[img_roi:900, i_w:2496] 
         m = cv2.bitwise_and(index, index, mask=pl)
@@ -236,22 +236,31 @@ def adjust_image(r_b,r_g,r_r,img_path, plots, varieties):
         p95_m = round(np.nanpercentile(m, 95), 5)
         p90_m = round(np.nanpercentile(m, 90), 5)
         p85_m = round(np.nanpercentile(m, 85), 5)
-        
+        file = os.path.basename(img_path)
+        date = Path(file[:].split('_')[0]).name
+        time = Path(file[:].split('_')[1]).name
+        date_time = date[:5] + '_' + time[:2]
+        rep_pic = file[-5]
+        variety = var[0]
+        rep_var = var[-1]
+        vi = "nvdi"
 
         # Make dictionary for ndvi of one plot
-        data = [mean_m, median_m, std_m, max_m, p95_m, p90_m, p85_m,img_path]
+        data = [date, time, date_time, variety, rep_var, vi, mean_m, median_m, std_m, max_m, p95_m, p90_m, p85_m,
+                rep_pic]
         nd.append(data)
     print(nd)
    
     vi_data.extend(nd)
 
-    header = [ 'mean', 'median', 'std', 'max', 'p95', 'p90',
+    header = ['date', 'time', 'date_time', 'variety', 'rep_var', 'vi', 'mean', 'median', 'std', 'max', 'p95', 'p90',
               'p85',
-              'imgpath']
+              'rep_pic']
     df_final = pd.DataFrame(vi_data)
     df_final.columns = header
 
     print(df_final)
+    return df_final 
     # Mask location on the image
     # plot = [pl1, pl2, pl3]
     # var = [v1, v2, v3]
@@ -374,7 +383,7 @@ def slice_into_boxes(image_path,out_folder,x,y,length,buffer=0,zoom_out=0,render
     length_base = 155
     box_size_base = 44
     height_base = 115
-    first_box_offset_x = int(14*(length/length_base))
+    first_box_offset_x = int(15*(length/length_base))
     first_box_offset_y = int(30*(length/length_base))
 
 
@@ -429,7 +438,7 @@ def slice_into_boxes(image_path,out_folder,x,y,length,buffer=0,zoom_out=0,render
 
 
 
-model = YOLO("yolov8m-seg-custom.pt")
+model = YOLO("yolov8m-seg-custom-2.pt")
 
 #model.predict(source="05-06-2022_13-30-56_4.png", show=False, save=True, hide_labels=False, hide_conf=False, conf=0.5, save_txt=False, save_crop=False, line_thickness=1)
 
@@ -439,7 +448,7 @@ def get_input_files_list(folder):
         if file.endswith(".png"):
            dir_list.append( os.path.join(folder, file))
     #print(dir_list[0:8])
-    return dir_list[0:15]
+    return dir_list
 
 #REPLACE THIS WITH YOUR LOCATION
 input_images = get_input_files_list("C:\\Users\\code8\\Downloads\\5 (1)\\5") #["02-08-2022_12-00-05_1.png", "02-07-2022_10-30-04_1.png"]
@@ -462,14 +471,17 @@ for i in range(0,len(input_images)):
     #print(result.boxes.cls)
     
     found_box = True
-    
+    # if len(result.boxes.cls) == 0:
+    #     invalid_images.append(invalid_images)
+    #     continue
+
     while int(result.boxes.cls[box_index]) != 1 :
         box_index += 1
         if box_index >= len(result.boxes.cls):
             found_box = False
             break
     if not found_box:
-        invalid_images.append(invalid_images)
+        invalid_images.append(image)
         continue
 
     box_bounding_box = box_bounding_list[box_index]
@@ -480,25 +492,27 @@ for i in range(0,len(input_images)):
     # cv2.rectangle(img, corner_1, corner_2, color=(255,0,0), thickness=1)
     # cv2.imwrite("./test_results/" + image, img)   
     print("before")
-    slice_into_boxes(image,".\\test_results",corner_1[0],corner_1[1],corner_2[0]-corner_1[0],3)
+    slice_into_boxes(image,".\\test_results",corner_1[0],corner_1[1],corner_2[0]-corner_1[0],4)
     print("after")
 if len(invalid_images) > 0:
     print("could not find panel on images:")
     for i in range(0,len(invalid_images)):
         print(invalid_images[i])
+        print(f"i ::::: {i}")
 
+
+#get data necesary for setup
 make_constant_csv("./test_results")
-
 med_arr = get_image_adjustment_baseline("test","./test_results/results.csv")
-
-
-
 image_adjustment_data("test","./test_results/results.csv",med_arr)
 
-for i in input_images:
+vi_data_in = []
+for i in set(input_images)- set(invalid_images):
     print(i)
-    plots = get_plot_mask(i)
+    plots = get_plot_mask(i, plot_model)
     b,g,r = get_r_g_b_constant_value("./test_results/results.csv",i)
-    adjust_image(b,g,r,i,plots,["1","2","3","4","5"])
-    break
+    results = adjust_image(b,g,r,i,[plots[0]],["1","2","3","4","5"], vi_data_in)
+
+pd.DataFrame(results).to_csv("./test_results/curve.csv")
+    
 
