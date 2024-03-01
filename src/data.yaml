@@ -1,6 +1,6 @@
-train: D:\condaEnv\files\wsuag-arduinoapp\src\dataset\train\images
-val: D:\condaEnv\files\wsuag-arduinoapp\src\dataset\valid\images
-test: D:\condaEnv\files\wsuag-arduinoapp\src\dataset\test\images
+train: D:\condaEnv\files\wsuag-arduinoapp\src\dataset-2\train\images
+val: D:\condaEnv\files\wsuag-arduinoapp\src\dataset-2\valid\images
+test: D:\condaEnv\files\wsuag-arduinoapp\src\dataset-2\test\images
 
 nc: 2
 names: ['box', 'field']
@@ -8,6 +8,6 @@ names: ['box', 'field']
 roboflow:
   workspace: shreyas-zmpfq
   project: fields2
-  version: 1
+  version: 2
   license: CC BY 4.0
-  url: https://universe.roboflow.com/shreyas-zmpfq/fields2/dataset/1
+  url: https://universe.roboflow.com/shreyas-zmpfq/fields2/dataset/2
