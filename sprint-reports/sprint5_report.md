@@ -16,12 +16,11 @@ We did not have any unfinished work in this sprint.
 
 ## Completed Issues/User Stories
 Here are links to the issues that we completed in this sprint:
-* [Integrating image adjustment code with new model](https://github.com/WSUCptSCapstone-F23-S24/wsuag-arduinoapp/issues/41)
-* [Create new segmentation model with yolov8](https://github.com/WSUCptSCapstone-F23-S24/wsuag-arduinoapp/issues/40)
-* [Create OBB -Oriented Bounding Box Model](https://github.com/WSUCptSCapstone-F23-S24/wsuag-arduinoapp/issues/39)
-* [Add installation files to repository](https://github.com/WSUCptSCapstone-F23-S24/wsuag-arduinoapp/issues/38)
-* [Move image augmentation code to new framework](https://github.com/WSUCptSCapstone-F23-S24/wsuag-arduinoapp/issues/37)
-* [Switch Frameworks from tensorflow and mask rcnn to yolov8](https://github.com/WSUCptSCapstone-F23-S24/wsuag-arduinoapp/issues/36)
+* [Image processing pipeline/growth curve](https://github.com/WSUCptSCapstone-F23-S24/wsuag-arduinoapp/issues/44)
+* [Preliminary testing of version 2/3/4 of the model](https://github.com/WSUCptSCapstone-F23-S24/wsuag-arduinoapp/issues/45)
+* [Improve and adjust dataset for training future iteration of models](https://github.com/WSUCptSCapstone-F23-S24/wsuag-arduinoapp/issues/46)
+* [Create different iterations of segmentation model with different base yolov8 models](https://github.com/WSUCptSCapstone-F23-S24/wsuag-arduinoapp/issues/48)
+* [Update project report and add sprint report and sprint video to readme](https://github.com/WSUCptSCapstone-F23-S24/wsuag-arduinoapp/issues/47)
 
  ## Incomplete Issues/User Stories
 * We completed all issues in this sprint
