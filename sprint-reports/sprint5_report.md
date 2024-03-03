@@ -29,10 +29,8 @@ Here are links to the issues that we completed in this sprint:
 
 ## Code Files for Review
 Please review the following code files, which were actively developed during this sprint, for quality:
-   * [detect_and_image_process.py](https://github.com/WSUCptSCapstone-F23-S24/wsuag-arduinoapp/blob/main/src/tf2.0/models/research/object_detection/detect_and_image_process.py)
-   * [plot_training.py](https://github.com/WSUCptSCapstone-F23-S24/wsuag-arduinoapp/blob/main/src/mrcnn_segmenting/kangaroo-transfer-learning/plot_training.py)
-   * [plot_prediction.py](https://github.com/WSUCptSCapstone-F23-S24/wsuag-arduinoapp/blob/main/src/mrcnn_segmenting/kangaroo-transfer-learning/plot_prediction.py)
-   * [training.py](https://github.com/WSUCptSCapstone-F23-S24/wsuag-arduinoapp/blob/main/src/mrcnn_segmenting/kangaroo-transfer-learning/training.py)
+   * [plot_growth_curve.py](https://github.com/WSUCptSCapstone-F23-S24/wsuag-arduinoapp/blob/sprint4.2/src/plot_growth_curve_adjusted.py)
+   * [predict.py](https://github.com/WSUCptSCapstone-F23-S24/wsuag-arduinoapp/blob/sprint4.2/src/predictnew.py)
 
  
 
