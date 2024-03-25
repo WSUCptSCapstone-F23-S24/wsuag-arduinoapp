@@ -1,4 +1,14 @@
-train: D:\condaEnv\train
-val: D:\condaEnv\test
-nc: 2
-names: ["field", "box"]
+train: D:\condaEnv\files\wsuag-arduinoapp\src\dataset\train\images
+val: D:\condaEnv\files\wsuag-arduinoapp\src\dataset\valid\images
+test: D:\condaEnv\files\wsuag-arduinoapp\src\dataset\test\images
+
+
+nc: 1
+names: ['box']
+
+roboflow:
+  workspace: shreyas-zmpfq
+  project: ttt-zq7zq
+  version: 1
+  license: CC BY 4.0
+  url: https://universe.roboflow.com/shreyas-zmpfq/ttt-zq7zq/dataset/1

@@ -1,8 +1,8 @@
 
-fields2 - v2 2024-02-28 4:33pm
+tt - v1 2024-03-24 5:23pm
 ==============================
 
-This dataset was exported via roboflow.com on February 29, 2024 at 1:20 AM GMT
+This dataset was exported via roboflow.com on March 25, 2024 at 12:25 AM GMT
 
 Roboflow is an end-to-end computer vision platform that helps you
 * collaborate with your team on computer vision projects
@@ -17,12 +17,12 @@ visit https://github.com/roboflow/notebooks
 
 To find over 100k other datasets and pre-trained models, visit https://universe.roboflow.com
 
-The dataset includes 158 images.
-A are annotated in YOLOv8 format.
+The dataset includes 500 images.
+Field are annotated in YOLOv8 format.
 
 The following pre-processing was applied to each image:
 * Auto-orientation of pixel data (with EXIF-orientation stripping)
-* Resize to 640x640 (Stretch)
+* Resize to 640x640 (Fit within)
 
 No image augmentation techniques were applied.
 
