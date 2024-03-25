@@ -2,12 +2,12 @@ train: ../train/images
 val: ../valid/images
 test: ../test/images
 
-nc: 2
-names: ['box', 'field']
+nc: 1
+names: ['box']
 
 roboflow:
   workspace: shreyas-zmpfq
-  project: fields2
+  project: ttt-zq7zq
   version: 1
   license: CC BY 4.0
-  url: https://universe.roboflow.com/shreyas-zmpfq/fields2/dataset/1
+  url: https://universe.roboflow.com/shreyas-zmpfq/ttt-zq7zq/dataset/1

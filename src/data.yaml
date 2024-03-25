@@ -2,12 +2,12 @@ train: D:\condaEnv\files\wsuag-arduinoapp\src\dataset-2\train\images
 val: D:\condaEnv\files\wsuag-arduinoapp\src\dataset-2\valid\images
 test: D:\condaEnv\files\wsuag-arduinoapp\src\dataset-2\test\images
 
-nc: 2
-names: ['box', 'field']
+nc: 1
+names: ['field']
 
 roboflow:
   workspace: shreyas-zmpfq
-  project: fields2
-  version: 2
+  project: tt-frlmc
+  version: 1
   license: CC BY 4.0
-  url: https://universe.roboflow.com/shreyas-zmpfq/fields2/dataset/2
+  url: https://universe.roboflow.com/shreyas-zmpfq/tt-frlmc/dataset/1
