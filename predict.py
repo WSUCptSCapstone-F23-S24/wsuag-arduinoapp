@@ -8,6 +8,8 @@ import os
 import numpy as np
 import pandas as pd
 from pathlib import Path
+import math
+import random
 
 
 
@@ -65,7 +67,7 @@ def image_adjustment_data(cam_name, in_path, med_arr):
 
 # gets the baseline values to adjust all the reference plates against
 # path to csv file
-def get_image_adjustment_baseline(cam_name, in_path):
+def get_image_adjustment_baseline(cam_name, in_path, csv_name = "out.csv"):
     # Input data
     cam = cam_name
     # Input path
@@ -76,9 +78,9 @@ def get_image_adjustment_baseline(cam_name, in_path):
     # Select targeted data
     value = 'max'
     ref_val = df[['sprectrum', value]]
-    r = ref_val[df['sprectrum'] == 'red'][-10:]  # Select only the last ten days data
-    g = ref_val[df['sprectrum'] == 'green'][-10:]
-    b = ref_val[df['sprectrum'] == 'blue'][-10:]
+    r = ref_val[df['sprectrum'] == 'red'].sample(n=10) # Select only the last ten days data
+    g = ref_val[df['sprectrum'] == 'green'].sample(n=10)
+    b = ref_val[df['sprectrum'] == 'blue'].sample(n=10)
 
     # Find median value
     b_med = round(np.nanmedian(b[[value]]), 5)  # Blue
@@ -92,7 +94,7 @@ def get_image_adjustment_baseline(cam_name, in_path):
     header = ['blue', 'green', 'red']
     df_final = pd.DataFrame(data)
     df_final.columns = header
-    df_final.to_csv(in_path+"out.csv", index=False)
+    df_final.to_csv(in_path+csv_name, index=False)
     return [b_med,g_med,r_med]
 
 
@@ -138,7 +140,40 @@ def get_r_g_b_constant_value(input_csv_path, input_image_path):
     return result
 
 plot_model = YOLO('yolov8m-seg-custom-2.pt')
-def get_plot_mask(img_in_path,model):
+
+
+#expected_coordinates = [x,y]
+def get_min_distance(plots_array, expected_coordinates):
+  
+    min_distance = 100000000000000
+    min_index = -1
+
+    for i in range(0,len(plots_array)):
+        #distance between top left corner and expected corner
+        curr_distance = math.sqrt((plots_array[i][0][0]-expected_coordinates[0])*(plots_array[i][0][0]-expected_coordinates[0]) + (plots_array[i][0][1]-expected_coordinates[1])*(plots_array[i][0][1]-expected_coordinates[1]))
+        if curr_distance<min_distance:
+            min_distance = curr_distance
+            min_index = i
+
+
+
+    
+    return (plots_array[min_index],min_index)
+
+#array_of_expected_coordinates: formate [[x,y],[45,67]]
+def distances_are_valid(plots_array, array_of_expected_coordinates, max_allow_allable_distance):
+    used_indexes = []
+    for curr in array_of_expected_coordinates:
+        val = get_min_distance(plots_array,curr)
+        if val[0] > max_allow_allable_distance:
+            raise Exception("plot to far away from expected location")
+        if val[1] in used_indexes:
+            raise Exception("two plots map to the same expected location")
+        used_indexes.append(val[1])
+        
+
+
+def get_plot_mask(img_in_path,model,expected_plot_values=[0]):
    
   
 
@@ -146,6 +181,7 @@ def get_plot_mask(img_in_path,model):
 
     results = model.predict(source=imgT, conf=0.8)
     plot_masks = []
+    plot_mask_with_expected = []
 
     for result in results:
         img = np.copy(result.orig_img)
@@ -194,10 +230,77 @@ def get_plot_mask(img_in_path,model):
             # print(f"Isolated image saved: {output_filename}")
     #sorts array by the x value of the top left corner 
     plot_masks = sorted(plot_masks,key=lambda x : x[0])
+
+    plot_mask_with_expected
+
     plot_masks = [i[1] for i in plot_masks]
+
+
 
     return plot_masks
                 
+
+def adjust_image_dummy_values(r_b,r_g,r_r,img_path, plots, varieties, ndvi_data_in):
+    img = cv2.imread(img_path) # Read the image
+    i_w = 1280
+    i_h = 1248
+    img_roi = 0
+    #img = img[img_roi:900, i_w:2496] # Resize the image
+   
+    # Split the color band
+    b, g, r = cv2.split(img)
+    b = r_b * b
+    g = r_g * g
+    r = r_r * r
+    vi_data = ndvi_data_in
+ 
+    # Calculate the ndvi
+   # index = ((1.664*(b.astype(float))) / (0.953*(r.astype(float)))) - 1
+    # Create black image for masking
+   # blank = np.zeros(index.shape[:2], dtype='uint8')
+    #print(index)
+    # cv2.imshow("i", img)
+    # key = cv2.waitKey()
+
+    nd = []
+
+    for var, pl in zip(varieties,plots):
+        # Mask the plot in left side
+        # pl_m = cv2.fillPoly(blank, np.array([pl]), 255)
+        # cv2.imshow("i", pl)
+        # key = cv2.waitKey()
+        #plots = plots[img_roi:900, i_w:2496] 
+        # m = cv2.bitwise_and(index, index, mask=pl)
+        # m[m <= 0] = np.nan  # Replace zero value to nan
+        mean_m = 0
+        median_m = 0
+        std_m = 0
+        max_m = 0
+        p95_m = 0
+        p90_m = 0
+        p85_m = 0
+        file = os.path.basename(img_path)
+        date = Path(file[:].split('_')[0]).name
+        time = Path(file[:].split('_')[1]).name
+        date_time = date[:5] + '_' + time[:2]
+        rep_pic = file[-5]
+        variety = var[0]
+        rep_var = var[-1]
+        vi = "nvdi"
+
+        # Make dictionary for ndvi of one plot
+        data = [date, time, date_time, variety, rep_var, vi, mean_m, median_m, std_m, max_m, p95_m, p90_m, p85_m,
+                rep_pic]
+        nd.append(data)
+    print(nd)
+   
+    vi_data.extend(nd)
+
+    header = ['date', 'time', 'date_time', 'variety', 'rep_var', 'vi', 'mean', 'median', 'std', 'max', 'p95', 'p90',
+              'p85',
+              'rep_pic']
+    df_final = pd.DataFrame(vi_data)
+    df_final.columns = header            
 
 def adjust_image(r_b,r_g,r_r,img_path, plots, varieties, ndvi_data_in):
     img = cv2.imread(img_path) # Read the image
@@ -261,7 +364,7 @@ def adjust_image(r_b,r_g,r_r,img_path, plots, varieties, ndvi_data_in):
     df_final = pd.DataFrame(vi_data)
     df_final.columns = header
 
-    print(df_final)
+   # print(df_final)
     return df_final 
     # Mask location on the image
     # plot = [pl1, pl2, pl3]
@@ -415,24 +518,32 @@ def slice_into_boxes(image_path,out_folder,x,y,length,buffer=0,zoom_out=0,render
     box_3_x_2 = int(x + first_box_offset_x + box_length * 3 + 2-(buffer))
     box_3_y_2 = int(y + first_box_offset_y + box_length-(buffer))
 
-    crop_box_1 = crop_img[(box_1_y_1 - zoom_out):(box_1_y_2 + zoom_out), (box_1_x_1 - zoom_out):(box_1_x_2 + zoom_out)]
+    crop_box_1 = crop_img[(box_1_y_1 ):(box_1_y_2), (box_1_x_1 ):(box_1_x_2 )]
+
     crop_box_2 = crop_img[(box_2_y_1 - zoom_out):(box_2_y_2 + zoom_out), (box_2_x_1 - zoom_out):(box_2_x_2 + zoom_out)]
     crop_box_3 = crop_img[(box_3_y_1 - zoom_out):(box_3_y_2 + zoom_out), (box_3_x_1 - zoom_out):(box_3_x_2 + zoom_out)]
     
     print(f"area {(box_1_x_1-box_1_x_2)*(box_1_y_2-box_1_y_1)}")
     if render_rectangle:
-        cv2.rectangle(crop_img, (box_1_x_1,box_1_y_1),
+        crop_img_debug = img.copy()
+        crop_box_1_debug = crop_img_debug [(box_1_y_1 - zoom_out):(box_1_y_2 + zoom_out), (box_1_x_1 - zoom_out):(box_1_x_2 + zoom_out)]
+        cv2.rectangle(crop_img_debug , (box_1_x_1,box_1_y_1),
                       (box_1_x_2,box_1_y_2), (0,0,256), 1)
 
-        cv2.rectangle(crop_img, (box_2_x_1 , box_2_y_1),
+        cv2.rectangle(crop_img_debug , (box_2_x_1 , box_2_y_1),
                       (box_2_x_2, box_2_y_2), (0, 256, 0), 1)
-        cv2.rectangle(crop_img, (box_3_x_1, box_3_y_1),
+        cv2.rectangle(crop_img_debug , (box_3_x_1, box_3_y_1),
                       (box_3_x_2, box_3_y_2), (256, 0, 0), 1)
         #cv2.imwrite(os.path.splitext(image_path)[0] + "_panel" + os.path.splitext(image_path)[1], crop_img)
     out_path = out_folder+"/"+os.path.splitext(os.path.basename(image_path))[0] + "_box_1" + os.path.splitext(image_path)[1]
     print("out path:")
     print(out_path)
     cv2.imwrite(out_path,crop_box_1)
+    if render_rectangle:
+        out_path_debug = out_folder+"/debug/"+os.path.splitext(os.path.basename(image_path))[0] + "_box_1" + os.path.splitext(image_path)[1]
+        print("out path:")
+        print(out_path)
+        cv2.imwrite(out_path_debug,crop_box_1_debug)
     # cv2.imwrite(out_folder+"\\box_2\\"+os.path.splitext(os.path.basename(image_path))[0] + "_box_2" + os.path.splitext(image_path)[1], crop_box_2)
     # cv2.imwrite(out_folder+"\\box_3\\"+os.path.splitext(os.path.basename(image_path))[0] + "_box_3" + os.path.splitext(image_path)[1], crop_box_3)
 
@@ -440,7 +551,7 @@ def slice_into_boxes(image_path,out_folder,x,y,length,buffer=0,zoom_out=0,render
 
 
 
-model = YOLO("yolov8m-seg-custom-2.pt")
+model = YOLO('yolov8m-seg-custom-2.pt')
 
 #model.predict(source="05-06-2022_13-30-56_4.png", show=False, save=True, hide_labels=False, hide_conf=False, conf=0.5, save_txt=False, save_crop=False, line_thickness=1)
 
@@ -462,19 +573,19 @@ invalid_images = []
 for i in range(0,len(input_images)):
     result = results[i]
     image = input_images[i]
-    print(f"IMAGE: {image}, {i} END")
+   # print(f"IMAGE: {image}, {i} END")
     #img = cv2.imread(image)
 
     box_bounding_list = result.boxes.xyxy
     # print(box_bounding_list)
     # print(result.boxes.cls)
-
+    #print(i)
     box_index = 0
     #print(result.boxes.cls)
     
     found_box = True
     # if len(result.boxes.cls) == 0:
-    #     invalid_images.append(invalid_images)
+    #     invalid_images.append(image)
     #     continue
 
     while int(result.boxes.cls[box_index]) != 1 :
@@ -494,26 +605,45 @@ for i in range(0,len(input_images)):
     # cv2.rectangle(img, corner_1, corner_2, color=(255,0,0), thickness=1)
     # cv2.imwrite("./test_results/" + image, img)   
     print("before")
-    slice_into_boxes(image,".\\test_results",corner_1[0],corner_1[1],corner_2[0]-corner_1[0],4)
+    slice_into_boxes(image,".\\test_results",corner_1[0],corner_1[1],corner_2[0]-corner_1[0],4,100,True)
     print("after")
 if len(invalid_images) > 0:
     print("could not find panel on images:")
     for i in range(0,len(invalid_images)):
         print(invalid_images[i])
         print(f"i ::::: {i}")
-
+input("Press Enter to continue...")
 
 #get data necesary for setup
 make_constant_csv("./test_results")
-med_arr = get_image_adjustment_baseline("test","./test_results/results.csv")
+
+
+
+
+med_arr = get_image_adjustment_baseline("test","./test_results/results.csv", f"out_baseline{i}.csv")
+
 image_adjustment_data("test","./test_results/results.csv",med_arr)
 
+
+
 vi_data_in = []
-for i in set(input_images)- set(invalid_images):
-    print(i)
+result = []
+
+for i in set(input_images):
+  
     plots = get_plot_mask(i, plot_model)
-    b,g,r = get_r_g_b_constant_value("./test_results/results.csv",i)
-    results = adjust_image(b,g,r,i,[plots[0]],["1","2","3","4","5"], vi_data_in)
+    # except:
+    #     results = adjust_image_dummy_values(0,0,0,i,[plots[0]],["1","2","3","4","5"], vi_data_in)
+    #     continue
+
+    if i in set(invalid_images):
+        results = adjust_image_dummy_values(0,0,0,i,[plots[0]],["1","2","3","4","5"], vi_data_in)
+    else:
+        print(i)
+                
+    
+        b,g,r = get_r_g_b_constant_value("./test_results/results.csv",i)
+        results = adjust_image(b,g,r,i,[plots[0]],["1","2","3","4","5"], vi_data_in)
 
 pd.DataFrame(results).to_csv("./test_results/curve.csv")
     
