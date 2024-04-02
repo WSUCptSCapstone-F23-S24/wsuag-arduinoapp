@@ -1,5 +1,6 @@
 from ultralytics import YOLO
 
+
 def initialize_plate_model(model_path='detect-plate.pt'):
     model = YOLO(model_path)
     return model
