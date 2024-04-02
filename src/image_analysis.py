@@ -98,7 +98,8 @@ def get_plot_mask(img_in_path,
                                      (255, 255, 255),
                                      cv2.FILLED)
 
-                x1, y1, x2, y2 = contour.boxes.xyxy.cpu().numpy().squeeze().astype(np.int32)
+                x1, y1, x2, y2 = (contour.boxes.xyxy.cpu()
+                                  .numpy().squeeze().astype(np.int32))
                 plot_masks.append((x1, binary_mask))
 
     # sorts array by the x value of the top left corner
