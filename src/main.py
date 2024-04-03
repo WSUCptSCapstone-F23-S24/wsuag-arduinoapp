@@ -5,12 +5,8 @@ from spatial_analysis import get_min_distance, distances_are_valid
 from model import initialize_plot_model, initialize_plate_model
 from ultralytics import YOLO
 import pandas as pd
-
-
-
-
-
-
+import os
+import shutil
 
 
 plot_model = initialize_plot_model()
@@ -18,7 +14,7 @@ model = initialize_plate_model()
 
 
 #REPLACE THIS WITH YOUR LOCATION
-input_images = get_input_files_list("./testset/s2") #["02-08-2022_12-00-05_1.png", "02-07-2022_10-30-04_1.png"]
+input_images = get_input_files_list("./testset/s5") #["02-08-2022_12-00-05_1.png", "02-07-2022_10-30-04_1.png"]
 results = model(input_images, conf=0.25)  # return a list of Results objects
 invalid_images = []
 
@@ -72,3 +68,4 @@ for i in set(input_images):
 
 pd.DataFrame(results).to_csv("./test_results/curve.csv")
     
+

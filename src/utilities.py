@@ -103,7 +103,7 @@ def make_constant_csv(in_path):
     print('finish')
 
 
-def slice_into_boxes(image_path, out_folder, x, y, length, buffer=0, zoom_out=0, render_rectangle=False):
+def slice_into_boxes(image_path, out_folder, x, y, length, buffer=3, zoom_out=3, render_rectangle=False):
     print(f"image path {image_path}")
 
 

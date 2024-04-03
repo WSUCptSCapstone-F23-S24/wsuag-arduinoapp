@@ -52,8 +52,6 @@ def image_adjustment_data(cam_name, in_path, med_arr):
     # save a dataframe
     df.to_csv(in_path, index=False)
 
-
-
 def adjust_image(r_b, r_g, r_r, img_path, plots, varieties, ndvi_data_in):
     img = cv2.imread(img_path) # Read the image
     i_w = 1280
@@ -70,22 +68,22 @@ def adjust_image(r_b, r_g, r_r, img_path, plots, varieties, ndvi_data_in):
  
     # Calculate the ndvi
     index = ((1.664*(b.astype(float))) / (0.953*(r.astype(float)))) - 1
-    # Create black image for masking
     blank = np.zeros(index.shape[:2], dtype='uint8')
-    print(index)
-    # cv2.imshow("i", img)
-    # key = cv2.waitKey()
 
     nd = []
+    output_folder = Path('./plot_images')
+    eroded_output_folder = output_folder / 'eroded'  # Separate folder for eroded images
+    output_folder.mkdir(exist_ok=True)
+    eroded_output_folder.mkdir(exist_ok=True)  # Create the folder if it doesn't exist
 
-    for var, pl in zip(varieties,plots):
-        # Mask the plot in left side
-        # pl_m = cv2.fillPoly(blank, np.array([pl]), 255)
-        # cv2.imshow("i", pl)
-        # key = cv2.waitKey()
-        #plots = plots[img_roi:900, i_w:2496] 
-        m = cv2.bitwise_and(index, index, mask=pl)
-        m[m <= 0] = np.nan  # Replace zero value to nan
+    for var, pl in zip(varieties, plots):
+        kernel = np.ones((5, 5), np.uint8)  # Define the kernel size, can be adjusted
+        eroded_plot = cv2.erode(pl, kernel, iterations=25)  # Apply erosion
+
+        m = cv2.bitwise_and(index, index, mask=eroded_plot)
+        m[m <= 0] = np.nan  # Replace zero value with nan
+
+        # Calculate statistics for the plot area
         mean_m = round(np.nanmean(m), 5)
         median_m = round(np.nanmedian(m), 5)
         std_m = round(np.nanstd(m), 5)
@@ -102,12 +100,29 @@ def adjust_image(r_b, r_g, r_r, img_path, plots, varieties, ndvi_data_in):
         rep_var = var[-1]
         vi = "nvdi"
 
-        # Make dictionary for ndvi of one plot
+        # Extracting file name and details for saving the plot images
+        file_name = Path(img_path).stem
+        date_time = file_name.split('_')[0]
+        plot_image_name = f"{file_name}_{var[0]}_{var[-1]}.png"
+        eroded_image_name = f"{file_name}_{var[0]}_{var[-1]}_eroded.png"
+
+        plot_image_path = output_folder / plot_image_name
+        eroded_image_path = eroded_output_folder / eroded_image_name
+
+        # Save the original plot image
+        plot_image = cv2.bitwise_and(img, img, mask=pl)
+        cv2.imwrite(str(plot_image_path), plot_image)
+
+        # Save the eroded plot image
+        eroded_image = cv2.bitwise_and(img, img, mask=eroded_plot)
+        cv2.imwrite(str(eroded_image_path), eroded_image)
+
+        # Data aggregation for return
         data = [date, time, date_time, variety, rep_var, vi, mean_m, median_m, std_m, max_m, p95_m, p90_m, p85_m,
                 rep_pic]
         nd.append(data)
-    print(nd)
-   
+        
+
     vi_data.extend(nd)
 
     header = ['date', 'time', 'date_time', 'variety', 'rep_var', 'vi', 'mean', 'median', 'std', 'max', 'p95', 'p90',
@@ -116,12 +131,7 @@ def adjust_image(r_b, r_g, r_r, img_path, plots, varieties, ndvi_data_in):
     df_final = pd.DataFrame(vi_data)
     df_final.columns = header
 
-   # print(df_final)
-    return df_final 
-    # Mask location on the image
-    # plot = [pl1, pl2, pl3]
-    # var = [v1, v2, v3]
-    # nd = []
+    return df_final
 
 
 
