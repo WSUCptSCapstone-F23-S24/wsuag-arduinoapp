@@ -1,8 +1,7 @@
 import unittest
 from src.model import initialize_plot_model, initialize_plate_model
-from src.image_adjustment import image_adjustment_data, adjust_image, adjust_image_dummy_values
-from src.image_analysis import get_image_adjustment_baseline, get_r_g_b_constant_value, get_plot_mask
-from src.utilities import make_constant_csv, slice_into_boxes, get_input_files_list
+from src.utilities import get_input_files_list
+
 from ultralytics import YOLO
 
 
@@ -34,66 +33,49 @@ class TestModel(unittest.TestCase):
         so we only need to test the base case.
         """
         plate_model = initialize_plate_model(self.plate_model_path)
-        assert isinstance(plate_model, YOLO)
-
-
-"""
-class Testimage_adjustment(unittest.TestCase):
-    def setUp(self):
-        yield
-
-    def tearDown(self):
-        yield
-
-    # image_adjustment_data test cases
-    def test_image_adjustment_data_base_case(self):
-        pass
-
-    # adjust_image test cases
-    def test_adjust_image_base_case(self):
-        pass
-
-    # adjust_image_dummy_values test cases
-    def test_adjust_image_dummy_values_base_case(self):
-        pass
-
-
-class Testimage_analysis(unittest.TestCase):
-    def setUp(self):
-        yield
-
-    def tearDown(self):
-        yield
-
-    # get_image_adjustment_baseline test cases
-    def test_get_image_adjustment_baseline_base_case(self):
-        pass
-
-    # get_r_g_b_constant_value test cases
-    def test_get_r_g_b_constant_value_base_case(self):
-        pass
-
-    # get_plot_mask test cases
-    def test_get_plot_mask_base_case(self):
-        pass
+        self.assertIsInstance(plate_model, YOLO)
 
 
 class Testutilities(unittest.TestCase):
     def setUp(self):
-        yield
-
-    def tearDown(self):
-        yield
-
-    # make_constant_csv test cases
-    def test_make_constant_csv_base_case(self):
         pass
 
-    # slice_into_boxes test cases
-    def test_slice_into_boxes_base_case(self):
+    def tearDown(self):
         pass
 
     # get_input_files_list test cases
     def test_get_input_files_list_base_case(self):
-        pass
-"""
+        """_summary_
+        Checks if the function returns a list of .png files in the given path.
+        """
+        expected = ['tests/data/testset\\01-08-2022_10-30-40_3.png',
+                    'tests/data/testset\\02-08-2022_12-00-23_2.png',
+                    'tests/data/testset\\03-06-2022_10-30-40_3.png',
+                    'tests/data/testset\\03-08-2022_12-01-17_5.png',
+                    'tests/data/testset\\04-08-2022_13-30-05_1.png',
+                    'tests/data/testset\\05-06-2022_10-30-58_4.png',
+                    'tests/data/testset\\05-07-2022_10-31-16_5.png',
+                    'tests/data/testset\\05-08-2022_12-01-16_5.png',
+                    'tests/data/testset\\06-07-2022_10-30-22_2.png',
+                    'tests/data/testset\\06-08-2022_12-00-23_2.png',
+                    'tests/data/testset\\07-07-2022_10-30-40_3.png']
+        path = "tests/data/testset"
+        self.assertEqual(get_input_files_list(path), expected)
+
+    def test_get_input_files_list_empty_case(self):
+        """_summary_
+        Returns list of .png files in the given path.
+        Given path does not contain any .png files,
+        so the output should be an empty list.
+        """
+        path = "tests/data/plates/labels"
+        self.assertEqual(get_input_files_list(path), [])
+
+    def test_get_input_files_list_invalid_case(self):
+        """_summary_
+        Returns list of .png files in the given path.
+        Given path is empty invalid,
+        so the output should be an empty list.
+        """
+        path = ""
+        self.assertRaises(FileNotFoundError, get_input_files_list, path)
