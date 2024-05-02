@@ -33,13 +33,13 @@ for i in range(len(input_images)):
     corner_1 = (int(box_bounding_box[0]), int(box_bounding_box[1]))
     corner_2 = (int(box_bounding_box[2]), int(box_bounding_box[3]))
 
-    print("before")
+    #print("before")
     slice_into_boxes(image, ".\\test_results", corner_1[0], corner_1[1],
-                     corner_2[0] - corner_1[0], 4, 100, True)
-    print("after")
+                     corner_2[0] - corner_1[0], 1, 100, True)
+    #print("after")
 
 if len(invalid_images) > 0:
-    print("Could not find panel on the following images:")
+    #print("Could not find panel on the following images:")
     for i, invalid_image in enumerate(invalid_images):
         print(f"{invalid_image} (index: {i})")
 
@@ -62,10 +62,11 @@ for i in set(input_images):
     if i in set(invalid_images):
         results = adjust_image_dummy_values(0,0,0,i,[plots[0]],["1","2","3","4","5"], vi_data_in)
     else:
-        print(i)
+        #print(i)
         b,g,r = get_r_g_b_constant_value("./test_results/results.csv",i)
         results = adjust_image(b,g,r,i,[plots[0]],["1","2","3","4","5"], vi_data_in)
 
 pd.DataFrame(results).to_csv("./test_results/curve.csv")
     
+print(invalid_images)
 

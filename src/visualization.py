@@ -22,24 +22,23 @@ def load_and_clean_data(file_path):
 
     # Filter rows where columns (excluding 'std') have values under 0.2
     columns_except_std = [col for col in columns_to_check if col != 'std']
-    condition = cleaned_df[columns_except_std].lt(0.2).any(axis=1)
+    condition = cleaned_df[columns_except_std].lt(0.5).any(axis=1)
     filtered_df = cleaned_df[~condition]
 
     return filtered_df
 
 def plot_data(df):
-    """
-    Create line plots for the specified numeric columns in the DataFrame.
-
-    Parameters:
-    - df: The pandas DataFrame containing the cleaned and filtered data.
-    """
-    # Set the figure size and layout
     plt.figure(figsize=(15, 10))
 
-    # Plot each of the specified columns
     for column in ['mean', 'median', 'std', 'max', 'p95', 'p90', 'p85']:
         plt.plot(df['date'], df[column], marker='o', label=column)
+
+    # Set custom y-axis limits
+    # You need to specify appropriate min_value and max_value based on your data's range
+    min_value = df[['mean', 'median', 'std', 'max', 'p95', 'p90', 'p85']].min().min() * 0.002  # 80% of the minimum value
+    max_value = df[['mean', 'median', 'std', 'max', 'p95', 'p90', 'p85']].max().max() * 2  # 120% of the maximum value
+
+    plt.ylim(min_value, max_value)  # Set the limits
 
     plt.title("Filtered Data over Time")
     plt.xlabel("Date")
@@ -48,7 +47,6 @@ def plot_data(df):
     plt.legend()
     plt.tight_layout()
     plt.show()
-
 def main():
     # Specify the file path to your data file
     file_path = './test_results/curve.csv'

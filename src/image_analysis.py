@@ -19,9 +19,14 @@ def get_image_adjustment_baseline(cam_name, in_path, csv_name="out.csv"):
     # Select targeted data
     value = 'max'
     ref_val = df[['sprectrum', value]]
-    r = ref_val[df['sprectrum'] == 'red'].sample(n=10) # Select only the last ten days data
-    g = ref_val[df['sprectrum'] == 'green'].sample(n=10)
-    b = ref_val[df['sprectrum'] == 'blue'].sample(n=10)
+    # r = ref_val[df['sprectrum'] == 'red'].sample(n=10) # Select only the last ten days data
+    # g = ref_val[df['sprectrum'] == 'green'].sample(n=10)
+    # b = ref_val[df['sprectrum'] == 'blue'].sample(n=10)
+
+
+    r = ref_val[df['sprectrum'] == 'red'][-10:]  # Select only the last ten days data
+    g = ref_val[df['sprectrum'] == 'green'][-10:]
+    b = ref_val[df['sprectrum'] == 'blue'][-10:]
 
     # Find median value
     b_med = round(np.nanmedian(b[[value]]), 5)  # Blue
@@ -58,8 +63,8 @@ def get_r_g_b_constant_value(input_csv_path, input_image_path):
     #print(df[(df['rep_pic'] == rep_pic)])
     
     #print(df[(df['date'] == date)])
-    print( df[(df['date'] == date)&(df['time'] == time1)&(df['sprectrum'] == "red")])
-    print("**********")
+   # print( df[(df['date'] == date)&(df['time'] == time1)&(df['sprectrum'] == "red")])
+    ##print("**********")
    # test = df[(df['date'] == date)&(df['time'] == time1)&(df['sprectrum'] == "red")]
     #print(test.iloc[0]["constant_ref"] )
 
@@ -69,8 +74,8 @@ def get_r_g_b_constant_value(input_csv_path, input_image_path):
     green = df[(df['date'] == date)&(df['time'] == time1)&(df['sprectrum'] == "green")].iloc[0]["constant_ref"]
     red = df[(df['date'] == date)&(df['time'] == time1)&(df['sprectrum'] == "red")].iloc[0]["constant_ref"]
     result = (blue,green,red)
-    print(red)
-    print(type(red))
+    ##print(red)
+    #print(type(red))
 
     return result
 
