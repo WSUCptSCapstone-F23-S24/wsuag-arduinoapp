@@ -16,11 +16,9 @@ We did not have any unfinished work in this sprint.
 
 ## Completed Issues/User Stories
 Here are links to the issues that we completed in this sprint:
-* [Image processing pipeline/growth curve](https://github.com/WSUCptSCapstone-F23-S24/wsuag-arduinoapp/issues/44)
-* [Preliminary testing of version 2/3/4 of the model](https://github.com/WSUCptSCapstone-F23-S24/wsuag-arduinoapp/issues/45)
-* [Improve and adjust dataset for training future iteration of models](https://github.com/WSUCptSCapstone-F23-S24/wsuag-arduinoapp/issues/46)
-* [Create different iterations of segmentation model with different base yolov8 models](https://github.com/WSUCptSCapstone-F23-S24/wsuag-arduinoapp/issues/48)
-* [Update project report and add sprint report and sprint video to readme](https://github.com/WSUCptSCapstone-F23-S24/wsuag-arduinoapp/issues/47)
+* [Improve model performance](https://github.com/WSUCptSCapstone-F23-S24/wsuag-arduinoapp/issues/56)
+* [Update image analysis and image adjustment code](https://github.com/WSUCptSCapstone-F23-S24/wsuag-arduinoapp/issues/57)
+* [Get accuracy statistics across datasets](https://github.com/WSUCptSCapstone-F23-S24/wsuag-arduinoapp/issues/49)
 
  ## Incomplete Issues/User Stories
 * We completed all issues in this sprint
