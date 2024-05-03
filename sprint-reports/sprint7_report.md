@@ -1,4 +1,4 @@
-# Sprint 6 Report 4/2/2024
+# Sprint 7 Report 4/2/2024
 
 ## What's New (User Facing)
  * Updated Model: Deployed a new iteration of our model that improves accuracy and efficiency.
